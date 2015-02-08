@@ -2,10 +2,10 @@ from setuptools import setup, find_packages
 import os
 
 ROOT = os.path.dirname(os.path.realpath(__file__))
-version = __import__('runscript').__version__
+version = __import__('selectors').__version__
 
 setup(
-    name = 'content-selector',
+    name = 'selectors',
     version = version,
     description = 'API to extract content from HTML & XML documents',
     author = 'Gregory Petukhov',
