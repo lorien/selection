@@ -13,7 +13,7 @@ setup(
     author = 'Gregory Petukhov',
     author_email = 'lorien@lorien.name',
     install_requires = ['lxml', 'tools', 'six'],
-    packages = ['script', 'test'],
+    packages = ['selection', 'selection.backend', 'script', 'test'],
     license = "MIT",
     classifiers = (
         'Programming Language :: Python',
