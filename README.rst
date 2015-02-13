@@ -2,7 +2,7 @@
 Selection
 =========
 
-.. image:: https://travis-ci.org/lorien/selection.png
+.. image:: https://travis-ci.org/lorien/selection.png?branch=master
     :target: https://travis-ci.org/lorien/selection
 
 .. image:: https://coveralls.io/repos/lorien/selection/badge.svg
