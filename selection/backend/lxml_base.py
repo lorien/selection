@@ -1,4 +1,9 @@
-from selectors.selector import BaseSelector
+import six
+from tools.etree import get_node_text, render_html
+from tools.text import find_number, normalize_space as normalize_space_func
+
+from selection.selector import BaseSelector
+from selection.const import NULL
 
 
 class LxmlBaseSelector(BaseSelector):
@@ -18,7 +23,7 @@ class LxmlBaseSelector(BaseSelector):
 
     def text(self, smart=False, normalize_space=True):
         elem = self.node
-        if isinstance(elem, basestring):
+        if isinstance(elem, six.string_types):
             if normalize_space:
                 return normalize_space_func(elem)
             else:

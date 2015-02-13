@@ -1,1 +1,2 @@
 lxml
+-e git+https://github.com/lorien/tools#egg=tools

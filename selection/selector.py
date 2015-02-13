@@ -8,15 +8,17 @@ try:
 except ImportError:
     pass
 from abc import ABCMeta, abstractmethod
+import six
 
-from grab.tools.lxml_tools import get_node_text, render_html
-from grab.tools.text import find_number, normalize_space as normalize_space_func
-from grab.error import GrabMisuseError, DataNotFound, warn
-from grab.tools import rex as rex_tools
-from grab.tools.text import normalize_space
-from grab.tools.html import decode_entities
+from tools.etree import get_node_text, render_html
+from tools.text import find_number, normalize_space as normalize_space_func
+from tools.error import RuntimeConfigError, DataNotFound, warn
+from tools import rex as rex_tools
+from tools.text import normalize_space
+from tools.html import decode_entities
 
-from selectors.const import NULL
+from selection.const import NULL
+from selection.selector_list import SelectorList
 
 __all__ = ['Selector', 'TextSelector', 'XpathSelector', 'PyquerySelector']
 XPATH_CACHE = {}
@@ -38,9 +40,11 @@ class BaseSelector(metaclass_ABCMeta):
         return selector_list
 
     def wrap_node_list(self, nodes, query):
+        from selection.backend.text import TextSelector
+
         selector_list = []
         for node in nodes:
-            if isinstance(node, basestring):
+            if isinstance(node, six.string_types):
                 selector_list.append(TextSelector(node))
             else:
                 selector_list.append(self.__class__(node))

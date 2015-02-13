@@ -1,17 +1,19 @@
 from setuptools import setup, find_packages
-import os
 
-ROOT = os.path.dirname(os.path.realpath(__file__))
-version = __import__('selectors').__version__
+"""
+with open('selection/version.py') as f:
+    code = compile(f.read(), 'version.py', 'exec')
+    exec(code, None, None)
+"""
 
 setup(
-    name = 'selectors',
-    version = version,
+    name = 'selection',
+    version = '0.0.4',
     description = 'API to extract content from HTML & XML documents',
     author = 'Gregory Petukhov',
     author_email = 'lorien@lorien.name',
-    install_requires = ['lxml'],
-    packages = find_packages(),
+    install_requires = ['lxml', 'tools', 'six'],
+    packages = ['script', 'test'],
     license = "MIT",
     classifiers = (
         'Programming Language :: Python',

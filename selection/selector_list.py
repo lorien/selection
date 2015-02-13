@@ -1,3 +1,6 @@
+from selection.const import NULL
+
+
 class SelectorList(object):
     __slots__ = ('selector_list', 'origin_selector_class', 'origin_query')
 

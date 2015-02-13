@@ -1,12 +1,12 @@
-========
-Selector
-========
+=========
+Selection
+=========
 
-.. image:: https://travis-ci.org/lorien/selector.png
-    :target: https://travis-ci.org/lorien/selector
+.. image:: https://travis-ci.org/lorien/selection.png
+    :target: https://travis-ci.org/lorien/selection
 
-.. image:: https://coveralls.io/repos/lorien/selector/badge.svg
-    :target: https://coveralls.io/r/lorien/selector
+.. image:: https://coveralls.io/repos/lorien/selection/badge.svg
+    :target: https://coveralls.io/r/lorien/selection
 
 API to extract data from HTML and XML documents.
 
@@ -16,11 +16,11 @@ Usage Example
 
 Example::
 
-    from selector import HtmlSelector
+    from selection import XpathSelector
     from lxml.html import fromstring
 
     html = '<div><h1>test</h1><ul id="items"><li>1</li><li>2</li></ul></div>'
-    sel = HtmlSelector(fromstring(html))
+    sel = XpathSelector(fromstring(html))
     print(sel.select('//h1')).text()
     print(sel.select('//li').text_list()
     print(sel.select('//ul').attr('id')

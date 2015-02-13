@@ -1,7 +1,10 @@
-from selectors.backend.lxml_base import LxmlBaseSelector
+from selection.backend.lxml_base import LxmlBaseSelector
 
 
-class XpathSelector(LxmlNodeBaseSelector):
+XPATH_CACHE = {}
+
+
+class XpathSelector(LxmlBaseSelector):
     __slots__ = ()
 
     def process_query(self, query):

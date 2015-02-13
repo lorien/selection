@@ -7,6 +7,7 @@ import os
 
 TEST_LIST = (
     'test.basic',
+    'test.selector',
 )
 
 def setup_arg_parser(parser):
