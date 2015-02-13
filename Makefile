@@ -1,15 +1,15 @@
 flake:
-	flake8 selector test
+	flake8 selection test
 
 flake_verbose:
-	flake8 selector test --show-pep8
+	flake8 selection test --show-pep8
 
 test:
 	run test
 
 coverage:
 	coverage erase
-	coverage run --source=selector -m runscript.cli test
+	coverage run --source=selection -m runscript.cli test
 	coverage report -m
 
 clean:
