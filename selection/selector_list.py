@@ -1,4 +1,5 @@
-from selection.const import NULL
+from tools.const import NULL
+from tools.error import DataNotFound
 
 
 class SelectorList(object):

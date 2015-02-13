@@ -3,7 +3,7 @@ from tools.etree import get_node_text, render_html
 from tools.text import find_number, normalize_space as normalize_space_func
 
 from selection.selector import BaseSelector
-from selection.const import NULL
+from tools.const import NULL
 
 
 class LxmlBaseSelector(BaseSelector):

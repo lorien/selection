@@ -17,7 +17,7 @@ from tools import rex as rex_tools
 from tools.text import normalize_space
 from tools.html import decode_entities
 
-from selection.const import NULL
+from tools.const import NULL
 from selection.selector_list import SelectorList
 
 __all__ = ['Selector', 'TextSelector', 'XpathSelector', 'PyquerySelector']

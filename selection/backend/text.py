@@ -1,5 +1,5 @@
 from selection.backend.lxml_base import LxmlBaseSelector
-from selection.const import NULL
+from tools.const import NULL
 
 
 class TextSelector(LxmlBaseSelector):
