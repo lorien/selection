@@ -34,20 +34,3 @@ class LxmlBaseSelector(BaseSelector):
         else:
             return get_node_text(elem, smart=smart,
                                  normalize_space=normalize_space)
-
-    def number(self, default=NULL, ignore_spaces=False,
-               smart=False, make_int=True):
-        try:
-            return find_number(self.text(smart=smart),
-                               ignore_spaces=ignore_spaces,
-                               make_int=make_int)
-        except IndexError:
-            if default is NULL:
-                raise
-            else:
-                return default
-
-    def rex(self, regexp, flags=0, byte=False):
-        norm_regexp = rex_tools.normalize_regexp(regexp, flags)
-        matches = list(norm_regexp.finditer(self.html()))
-        return RexResultList(matches, source_rex=norm_regexp)

@@ -3,10 +3,6 @@ Selector module provides high usability interface to lxml tree
 """
 import logging
 import time
-try:
-    from pyquery import PyQuery
-except ImportError:
-    pass
 from abc import ABCMeta, abstractmethod
 import six
 
@@ -52,15 +48,15 @@ class BaseSelector(metaclass_ABCMeta):
 
     @abstractmethod
     def html(self):
-        raise NotImplementedError
+        "Not implemented"
 
     @abstractmethod
     def attr(self):
-        raise NotImplementedError
+        "Not implemented"
 
     @abstractmethod
     def text(self):
-        raise NotImplementedError
+        "Not implemented"
 
     def number(self, default=NULL, ignore_spaces=False,
                smart=False, make_int=True):

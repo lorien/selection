@@ -1,5 +1,7 @@
 from tools.const import NULL
 from tools.error import DataNotFound
+from tools.text import normalize_space as normalize_space_func
+from tools.html import decode_entities
 
 
 class SelectorList(object):
@@ -153,10 +155,10 @@ class RexResultList(object):
 
     def text(self, default=NULL):
         try:
-            return normalize_space(decode_entities(self.one().group(1)))
+            return normalize_space_func(decode_entities(self.one().group(1)))
         except (AttributeError, IndexError):
             if default is NULL:
-                raise
+                raise DataNotFound
             else:
                 return default
 

@@ -5,7 +5,10 @@ from tools.error import DataNotFound
 
 from selection import XpathSelector
 from selection.backend.text import TextSelector
+from selection.backend.pyquery import PyquerySelector
 from selection.selector_list import RexResultList
+from selection.selector import BaseSelector
+from selection.error import SelectionRuntimeError
 
 
 HTML = """
@@ -41,12 +44,21 @@ class TestSelector(TestCase):
         sel = XpathSelector(self.tree.xpath('//h1')[0])
         self.assertEquals('<h1>test</h1>', sel.html().strip())
 
-    def test_number(self):
+    def test_sel_list_number(self):
         self.assertEquals(4, XpathSelector(self.tree).select('//ul/li[last()]').number())
         self.assertEquals(6, XpathSelector(self.tree).select('//ul/li[last()]/@id').number())
 
-    def test_number_does_not_exist(self):
+    def test_sel_list_number_does_not_exist(self):
         sel = XpathSelector(self.tree).select('//ul/li[1]')
+        self.assertEquals('DEFAULT', sel.number(default='DEFAULT'))
+        self.assertRaises(DataNotFound, lambda: sel.number())
+
+    def test_selector_number(self):
+        self.assertEquals(4, XpathSelector(self.tree).select('//ul/li[last()]').one().number())
+        self.assertEquals(6, XpathSelector(self.tree).select('//ul/li[last()]/@id').one().number())
+
+    def test_selector_number_does_not_exist(self):
+        sel = XpathSelector(self.tree).select('//ul/li[1]').one()
         self.assertEquals('DEFAULT', sel.number(default='DEFAULT'))
         self.assertRaises(DataNotFound, lambda: sel.number())
 
@@ -95,6 +107,34 @@ class TestSelector(TestCase):
         sel = XpathSelector(self.tree)
         self.assertTrue(isinstance(sel.select('//li').rex('\w*'), RexResultList))
 
+    def test_pyquery_selector(self):
+        sel = PyquerySelector(self.tree)
+        self.assertEquals('one', sel.select('li').text())
+
+    def test_text_selector_select(self):
+        sel = XpathSelector(self.tree).select('//li/text()').one()
+        self.assertRaises(SelectionRuntimeError, lambda: sel.select('foo'))
+
+    def test_text_selector_html(self):
+        sel = XpathSelector(self.tree).select('//li/text()').one()
+        self.assertEquals(u'one', sel.html())
+
+    def test_text_selector_attr(self):
+        sel = XpathSelector(self.tree).select('//li/text()').one()
+        self.assertRaises(SelectionRuntimeError, lambda: sel.attr('foo'))
+
+    """
+    def test_base_selector_html(self):
+        class ChildSelector(BaseSelector):
+            def html(self):
+                pass
+
+            def text(self):
+                pass
+
+        sel = ChildSelector(self.tree)
+    """
+
 
 class TestSelectorList(TestCase):
     def setUp(self):
@@ -105,9 +145,53 @@ class TestSelectorList(TestCase):
         self.assertEquals('one', sel.one().node.text)
         self.assertEquals('one', sel.text())
 
+    def test_one_default(self):
+        sel = XpathSelector(self.tree).select('//ul/li[10]')
+        self.assertRaises(DataNotFound, lambda: sel.one())
+        self.assertEqual('DEFAULT', sel.one(default='DEFAULT'))
+
+    def test_node(self):
+        sel = XpathSelector(self.tree).select('//ul/li')
+        self.assertEquals(self.tree.xpath('//ul/li')[0], sel.node())
+
+    def test_node_default(self):
+        sel = XpathSelector(self.tree).select('//ul/li[10]')
+        self.assertRaises(DataNotFound, lambda: sel.node())
+        self.assertEqual('DEFAULT', sel.node(default='DEFAULT'))
+
+    def test_text(self):
+        sel = XpathSelector(self.tree).select('//ul/li')
+        self.assertEquals('one', sel.text())
+
+    def test_text_default(self):
+        sel = XpathSelector(self.tree).select('//ul/li[10]')
+        self.assertRaises(DataNotFound, sel.text)
+        self.assertEquals('DEFAULT', sel.text(default='DEFAULT'))
+
+    def test_html(self):
+        sel = XpathSelector(self.tree).select('//ul/li')
+        self.assertEquals(u'<li>one</li>', sel.html().strip())
+
+    def test_html_default(self):
+        sel = XpathSelector(self.tree).select('//ul/li[10]')
+        self.assertRaises(DataNotFound, sel.html)
+        self.assertEquals('DEFAULT', sel.html(default='DEFAULT'))
+
     def test_number(self):
         sel = XpathSelector(self.tree).select('//ul/li[4]')
         self.assertEquals(4, sel.number())
+
+    def test_number_default(self):
+        sel = XpathSelector(self.tree).select('//ul/li[10]')
+        self.assertRaises(DataNotFound, sel.number)
+        self.assertEquals('DEFAULT', sel.number(default='DEFAULT'))
+
+    def test_assert_exists(self):
+        sel = XpathSelector(self.tree).select('//ul/li')
+        sel.assert_exists()
+
+        sel = XpathSelector(self.tree).select('//ul/li[10]')
+        self.assertRaises(DataNotFound, sel.assert_exists)
 
     def test_exists(self):
         sel = XpathSelector(self.tree).select('//ul/li[4]')
@@ -129,3 +213,50 @@ class TestSelectorList(TestCase):
         self.assertEquals(True, self.tree.xpath('//ul[1]/li[1]/text()="one"'))
         sel = XpathSelector(self.tree).select('//ul[1]/li[1]/text()="one"')
         self.assertEquals(False, sel.exists())
+
+    def test_attr(self):
+        sel = XpathSelector(self.tree).select('//ul[2]/li')
+        self.assertEquals('li-1', sel.attr('class'))
+
+    def test_attr_default(self):
+        sel = XpathSelector(self.tree).select('//ul[2]/li[10]')
+        self.assertRaises(DataNotFound, lambda: sel.attr('class'))
+        self.assertEquals('DEFAULT', sel.attr('class', default='DEFAULT'))
+
+    def test_rex(self):
+        sel = XpathSelector(self.tree).select('//ul/li')
+        self.assertTrue(isinstance(sel.rex('(\w+)'), RexResultList))
+
+    def test_rex_default(self):
+        sel = XpathSelector(self.tree).select('//ul/li[10]')
+        self.assertRaises(DataNotFound, lambda: sel.rex('zz'))
+        self.assertEquals('DEFAULT', sel.rex('zz', default='DEFAULT'))
+
+    def test_node_list(self):
+        sel = XpathSelector(self.tree).select('//ul/li')
+        self.assertEquals(self.tree.xpath('//ul/li'), sel.node_list())
+
+
+class RexResultListTestCase(TestCase):
+    def setUp(self):
+        self.tree = fromstring(HTML)
+
+    def test_one(self):
+        sel = XpathSelector(self.tree).select('//ul/li')
+        self.assertEquals('SRE_Match', sel.rex('one').one().__class__.__name__)
+
+    def test_text(self):
+        sel = XpathSelector(self.tree).select('//ul/li/text()')
+        self.assertEquals('one', sel.rex('(\w+)').text())
+
+    def test_text_no_default(self):
+        sel = XpathSelector(self.tree).select('//ul/li/text()')
+        self.assertRaises(DataNotFound, lambda: sel.rex('(zz)').text())
+
+    def test_text_default_value(self):
+        sel = XpathSelector(self.tree).select('//ul/li/text()')
+        self.assertEquals('DEFAULT', sel.rex('(zz)').text(default='DEFAULT'))
+
+    def test_number(self):
+        sel = XpathSelector(self.tree).select('//ul/li[4]/text()')
+        self.assertEquals(4, sel.rex('(\d+)').number())
