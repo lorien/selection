@@ -8,7 +8,7 @@ with open('selection/version.py') as f:
 
 setup(
     name = 'selection',
-    version = '0.0.5',
+    version = '0.0.6',
     description = 'API to extract content from HTML & XML documents',
     author = 'Gregory Petukhov',
     author_email = 'lorien@lorien.name',
