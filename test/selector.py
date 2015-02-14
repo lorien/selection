@@ -1,8 +1,12 @@
 # coding: utf-8
 from unittest import TestCase
+from lxml.html import fromstring
+from tools.error import DataNotFound
+
 from selection import XpathSelector
 from selection.backend.text import TextSelector
-from lxml.html import fromstring
+from selection.selector_list import RexResultList
+
 
 HTML = """
 <html>
@@ -10,7 +14,7 @@ HTML = """
         <h1>test</h1>
         <ul>
             <li>one</li>
-            <li>two</li>
+            <li> two </li>
             <li>three</li>
             <li id="6">z 4 foo</li>
         </ul>
@@ -21,6 +25,7 @@ HTML = """
     </body>
 </html>
 """
+
 
 class TestSelector(TestCase):
     def setUp(self):
@@ -36,16 +41,24 @@ class TestSelector(TestCase):
         sel = XpathSelector(self.tree.xpath('//h1')[0])
         self.assertEquals('<h1>test</h1>', sel.html().strip())
 
-    def test_textselector(self):
-        self.assertEquals('one', XpathSelector(self.tree).select('//li/text()').text())
-
     def test_number(self):
         self.assertEquals(4, XpathSelector(self.tree).select('//ul/li[last()]').number())
         self.assertEquals(6, XpathSelector(self.tree).select('//ul/li[last()]/@id').number())
 
+    def test_number_does_not_exist(self):
+        sel = XpathSelector(self.tree).select('//ul/li[1]')
+        self.assertEquals('DEFAULT', sel.number(default='DEFAULT'))
+        self.assertRaises(DataNotFound, lambda: sel.number())
+
     def test_text_selector(self):
         sel = XpathSelector(self.tree).select('//li/text()').one()
         self.assertTrue(isinstance(sel, TextSelector))
+        self.assertEquals('one', XpathSelector(self.tree).select('//li/text()').text())
+
+    def test_text_method_normalize_space(self):
+        sel = XpathSelector(self.tree).select('//li[2]/text()')
+        self.assertEquals('two', sel.text())
+        self.assertEquals(' two ', sel.text(normalize_space=False))
 
     def test_select_select(self):
         root = XpathSelector(self.tree)
@@ -59,12 +72,28 @@ class TestSelector(TestCase):
                           set(root.select('//ul/li[1]').text_list()),
                           )
 
+    def test_attr(self):
+        root = XpathSelector(self.tree)
+        self.assertEqual('second-list', root.select('//ul[2]').attr('id'))
+
+    def test_attr_with_default_value(self):
+        root = XpathSelector(self.tree)
+        self.assertEqual('z', root.select('//ul[2]').attr('id-xxx', default='z'))
+
+    def test_attr_does_not_exist(self):
+        root = XpathSelector(self.tree)
+        self.assertRaises(DataNotFound, lambda: root.select('//ul[1]').attr('id-xxx'))
+
     def test_attr_list(self):
         root = XpathSelector(self.tree)
         self.assertEquals(set(['li-1', 'li-2']),
                           set(root.select('//ul[@id="second-list"]/li')\
                                   .attr_list('class'))
                           )
+
+    def test_rex_method(self):
+        sel = XpathSelector(self.tree)
+        self.assertTrue(isinstance(sel.select('//li').rex('\w*'), RexResultList))
 
 
 class TestSelectorList(TestCase):

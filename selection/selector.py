@@ -18,7 +18,7 @@ from tools.text import normalize_space
 from tools.html import decode_entities
 
 from tools.const import NULL
-from selection.selector_list import SelectorList
+from selection.selector_list import SelectorList, RexResultList
 
 __all__ = ['Selector', 'TextSelector', 'XpathSelector', 'PyquerySelector']
 XPATH_CACHE = {}
