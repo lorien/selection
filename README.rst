@@ -23,7 +23,7 @@ API to extract data from HTML and XML documents.
 Usage Example
 =============
 
-Example::
+Example:
 
 .. code:: python
 
