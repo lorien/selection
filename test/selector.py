@@ -7,7 +7,6 @@ from selection import XpathSelector
 from selection.backend.text import TextSelector
 from selection.backend.pyquery import PyquerySelector
 from selection.selector_list import RexResultList
-from selection.selector import BaseSelector
 from selection.error import SelectionRuntimeError
 
 
@@ -35,18 +34,20 @@ class TestSelector(TestCase):
         self.tree = fromstring(HTML)
 
     def test_in_general(self):
-        sel = XpathSelector(self.tree)
+        XpathSelector(self.tree)
 
     def test_select_node(self):
-        self.assertEquals('test', XpathSelector(self.tree).select('//h1')[0].node.text)
+        sel = XpathSelector(self.tree)
+        self.assertEquals('test', sel.select('//h1')[0].node.text)
 
     def test_html(self):
         sel = XpathSelector(self.tree.xpath('//h1')[0])
         self.assertEquals('<h1>test</h1>', sel.html().strip())
 
     def test_sel_list_number(self):
-        self.assertEquals(4, XpathSelector(self.tree).select('//ul/li[last()]').number())
-        self.assertEquals(6, XpathSelector(self.tree).select('//ul/li[last()]/@id').number())
+        sel = XpathSelector(self.tree)
+        self.assertEquals(4, sel.select('//ul/li[last()]').number())
+        self.assertEquals(6, sel.select('//ul/li[last()]/@id').number())
 
     def test_sel_list_number_does_not_exist(self):
         sel = XpathSelector(self.tree).select('//ul/li[1]')
@@ -54,8 +55,9 @@ class TestSelector(TestCase):
         self.assertRaises(DataNotFound, lambda: sel.number())
 
     def test_selector_number(self):
-        self.assertEquals(4, XpathSelector(self.tree).select('//ul/li[last()]').one().number())
-        self.assertEquals(6, XpathSelector(self.tree).select('//ul/li[last()]/@id').one().number())
+        sel = XpathSelector(self.tree)
+        self.assertEquals(4, sel.select('//ul/li[last()]').one().number())
+        self.assertEquals(6, sel.select('//ul/li[last()]/@id').one().number())
 
     def test_selector_number_does_not_exist(self):
         sel = XpathSelector(self.tree).select('//ul/li[1]').one()
@@ -65,7 +67,8 @@ class TestSelector(TestCase):
     def test_text_selector(self):
         sel = XpathSelector(self.tree).select('//li/text()').one()
         self.assertTrue(isinstance(sel, TextSelector))
-        self.assertEquals('one', XpathSelector(self.tree).select('//li/text()').text())
+        self.assertEquals('one', XpathSelector(self.tree).select('//li/text()')
+                                                         .text())
 
     def test_text_method_normalize_space(self):
         sel = XpathSelector(self.tree).select('//li[2]/text()')
@@ -75,14 +78,13 @@ class TestSelector(TestCase):
     def test_select_select(self):
         root = XpathSelector(self.tree)
         self.assertEquals(set(['one', 'yet one']),
-                          set([x.text() for x in root.select('//ul').select('./li[1]')]),
-                          )
+                          set([x.text() for x in root.select('//ul')
+                                                     .select('./li[1]')]))
 
     def test_text_list(self):
         root = XpathSelector(self.tree)
         self.assertEquals(set(['one', 'yet one']),
-                          set(root.select('//ul/li[1]').text_list()),
-                          )
+                          set(root.select('//ul/li[1]').text_list()))
 
     def test_attr(self):
         root = XpathSelector(self.tree)
@@ -90,22 +92,24 @@ class TestSelector(TestCase):
 
     def test_attr_with_default_value(self):
         root = XpathSelector(self.tree)
-        self.assertEqual('z', root.select('//ul[2]').attr('id-xxx', default='z'))
+        self.assertEqual('z', root.select('//ul[2]').attr('id-xxx',
+                                                          default='z'))
 
     def test_attr_does_not_exist(self):
         root = XpathSelector(self.tree)
-        self.assertRaises(DataNotFound, lambda: root.select('//ul[1]').attr('id-xxx'))
+        self.assertRaises(DataNotFound, lambda: root.select('//ul[1]')
+                                                    .attr('id-xxx'))
 
     def test_attr_list(self):
         root = XpathSelector(self.tree)
         self.assertEquals(set(['li-1', 'li-2']),
-                          set(root.select('//ul[@id="second-list"]/li')\
-                                  .attr_list('class'))
-                          )
+                          set(root.select('//ul[@id="second-list"]/li')
+                                  .attr_list('class')))
 
     def test_rex_method(self):
         sel = XpathSelector(self.tree)
-        self.assertTrue(isinstance(sel.select('//li').rex('\w*'), RexResultList))
+        self.assertTrue(isinstance(sel.select('//li')
+                                      .rex('\w*'), RexResultList))
 
     def test_pyquery_selector(self):
         sel = PyquerySelector(self.tree)
@@ -121,7 +125,7 @@ class TestSelector(TestCase):
 
     def test_text_selector_attr(self):
         sel = XpathSelector(self.tree).select('//li/text()').one()
-        self.assertRaises(SelectionRuntimeError, lambda: sel.attr('foo'))
+        self.assertRaises(SelectionRuntimeError, sel.attr, 'foo')
 
     """
     def test_base_selector_html(self):

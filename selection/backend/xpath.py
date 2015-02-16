@@ -10,7 +10,7 @@ class XpathSelector(LxmlBaseSelector):
     def process_query(self, query):
         from lxml.etree import XPath
 
-        if not query in XPATH_CACHE:
+        if query not in XPATH_CACHE:
             obj = XPath(query)
             XPATH_CACHE[query] = obj
         xpath_obj = XPATH_CACHE[query]

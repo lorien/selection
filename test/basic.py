@@ -10,6 +10,7 @@ HTML = """
     <li>Item 2</li>
 """
 
+
 class BasicTestCase(TestCase):
     def test_lxml_fromstring(self):
         tree = fromstring(HTML)

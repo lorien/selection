@@ -101,8 +101,9 @@ class SelectorList(object):
         """
 
         if not self.exists():
-            raise DataNotFound(u'Node does not exists, query: %s, query type: %s' % (
-                self.origin_query, self.origin_selector_class.__name__))
+            args = (self.origin_query, self.origin_selector_class.__name__)
+            raise DataNotFound(u'Node does not exists, query: %s, '
+                               u'query type: %s' % args)
 
     def attr(self, key, default=NULL):
         try:
@@ -130,7 +131,7 @@ class SelectorList(object):
             else:
                 return default
         else:
-            return self.one().rex(regexp, flags=flags, byte=byte)
+            return sel.rex(regexp, flags=flags, byte=byte)
 
     def node_list(self):
         return [x.node for x in self.selector_list]

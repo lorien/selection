@@ -2,21 +2,16 @@
 Selector module provides high usability interface to lxml tree
 """
 import logging
-import time
 from abc import ABCMeta, abstractmethod
 import six
 
-from tools.etree import get_node_text, render_html
-from tools.text import find_number, normalize_space as normalize_space_func
-from tools.error import RuntimeConfigError, DataNotFound, warn
+from tools.text import find_number
 from tools import rex as rex_tools
-from tools.text import normalize_space
-from tools.html import decode_entities
 
 from tools.const import NULL
 from selection.selector_list import SelectorList, RexResultList
 
-__all__ = ['Selector', 'TextSelector', 'XpathSelector', 'PyquerySelector']
+__all__ = ('BaseSelector',)
 XPATH_CACHE = {}
 logger = logging.getLogger('grab.selector.selector')
 
@@ -30,10 +25,7 @@ class BaseSelector(metaclass_ABCMeta):
         self.node = node
 
     def select(self, query):
-        start = time.time()
-        selector_list = self.wrap_node_list(self.process_query(query), query)
-        total = time.time() - start
-        return selector_list
+        return self.wrap_node_list(self.process_query(query), query)
 
     def wrap_node_list(self, nodes, query):
         from selection.backend.text import TextSelector

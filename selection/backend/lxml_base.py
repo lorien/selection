@@ -1,10 +1,8 @@
 import six
 from tools.etree import get_node_text, render_html
-from tools.text import find_number, normalize_space as normalize_space_func
-from tools import rex as rex_tools
+from tools.text import normalize_space as normalize_space_func
 
 from selection.selector import BaseSelector
-from selection.selector_list import RexResultList
 from tools.const import NULL
 from tools.error import DataNotFound
 
