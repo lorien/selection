@@ -5,8 +5,17 @@ Selection
 .. image:: https://travis-ci.org/lorien/selection.png?branch=master
     :target: https://travis-ci.org/lorien/selection
 
-.. image:: https://coveralls.io/repos/lorien/selection/badge.svg
-    :target: https://coveralls.io/r/lorien/selection
+.. image:: https://coveralls.io/repos/lorien/selection/badge.svg?branch=master
+    :target: https://coveralls.io/r/lorien/selection?branch=master
+
+.. image:: https://pypip.in/download/selection/badge.svg?period=month
+    :target: https://pypi.python.org/pypi/selection
+
+.. image:: https://pypip.in/version/selection/badge.svg
+    :target: https://pypi.python.org/pypi/selection
+
+.. image:: https://landscape.io/github/lorien/selection/master/landscape.png
+   :target: https://landscape.io/github/lorien/selection/master
 
 API to extract data from HTML and XML documents.
 
