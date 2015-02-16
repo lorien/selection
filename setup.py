@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = 'selection',
-    version = '0.0.3',
+    version = '0.0.4',
     description = 'API to extract content from HTML & XML documents',
     author = 'Gregory Petukhov',
     author_email = 'lorien@lorien.name',
