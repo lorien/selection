@@ -1,12 +1,11 @@
-from selection.mixin.lxml import LxmlSelectorMixin
-from selection.mixin.common import CommonSelectorMixin
-from selection.selector import SelectorInterface
+from __future__ import absolute_import
+from selection.backend.lxml import LxmlSelector
 
 __all__ = ('XpathSelector',)
 XPATH_CACHE = {}
 
 
-class XpathSelector(CommonSelectorMixin, LxmlSelectorMixin, SelectorInterface):
+class XpathSelector(LxmlSelector):
     __slots__ = ()
 
     def process_query(self, query):

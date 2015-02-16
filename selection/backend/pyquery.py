@@ -1,13 +1,10 @@
 from __future__ import absolute_import  # needs for pyquery_node method
-from selection.mixin.lxml import LxmlSelectorMixin
-from selection.mixin.common import CommonSelectorMixin
-from selection.selector import SelectorInterface
+from selection.backend.lxml import LxmlSelector
 
 __all__ = ('PyquerySelector',)
 
 
-class PyquerySelector(CommonSelectorMixin, LxmlSelectorMixin,
-                      SelectorInterface):
+class PyquerySelector(LxmlSelector):
     __slots__ = ()
 
     def pyquery_node(self):

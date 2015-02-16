@@ -4,11 +4,12 @@ from tools.text import normalize_space as normalize_space_func
 from tools.const import NULL
 from tools.error import DataNotFound
 from selection.error import SelectionRuntimeError
+from selection.backend.common import CommonSelector
 
-__all__ = ('LxmlSelectorMixin',)
+__all__ = ('LxmlSelector',)
 
 
-class LxmlSelectorMixin(object):
+class LxmlSelector(CommonSelector):
     __slots__ = ()
 
     def html(self, encoding='unicode'):
@@ -24,7 +25,7 @@ class LxmlSelectorMixin(object):
         if self.is_text_node():
             raise SelectionRuntimeError('Text node selectors do not '
                                         'allow select method')
-        return super(LxmlSelectorMixin, self).select(query)
+        return super(LxmlSelector, self).select(query)
 
     def attr(self, key, default=NULL):
         if self.is_text_node():

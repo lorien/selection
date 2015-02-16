@@ -3,11 +3,12 @@ from tools import rex as rex_tools
 
 from tools.const import NULL
 from selection.selector_list import RexResultList
+from selection.selector import SelectorInterface
 
-__all__ = ('CommonSelectorMixin',)
+__all__ = ('CommonSelector',)
 
 
-class CommonSelectorMixin(object):
+class CommonSelector(SelectorInterface):
     __slots__ = ()
 
     def number(self, default=NULL, ignore_spaces=False,
