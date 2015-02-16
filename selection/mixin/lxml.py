@@ -13,12 +13,12 @@ class LxmlSelectorMixin(object):
 
     def html(self, encoding='unicode'):
         if self.is_text_node():
-            return self._node
+            return self.node()
         else:
-            return render_html(self._node, encoding=encoding)
+            return render_html(self.node(), encoding=encoding)
 
     def is_text_node(self):
-        return isinstance(self._node, six.string_types)
+        return isinstance(self.node(), six.string_types)
 
     def select(self, query=None):
         if self.is_text_node():
@@ -31,19 +31,19 @@ class LxmlSelectorMixin(object):
             raise SelectionRuntimeError('Text node selectors do not '
                                         'allow attr method')
         if default is NULL:
-            if key in self._node.attrib:
-                return self._node.get(key)
+            if key in self.node().attrib:
+                return self.node().get(key)
             else:
                 raise DataNotFound(u'No such attribute: %s' % key)
         else:
-            return self._node.get(key, default)
+            return self.node().get(key, default)
 
     def text(self, smart=False, normalize_space=True):
         if self.is_text_node():
             if normalize_space:
-                return normalize_space_func(self._node)
+                return normalize_space_func(self.node())
             else:
-                return self._node
+                return self.node()
         else:
-            return get_node_text(self._node, smart=smart,
+            return get_node_text(self.node(), smart=smart,
                                  normalize_space=normalize_space)

@@ -18,6 +18,9 @@ class SelectorInterface(metaclass_ABCMeta):
     def __init__(self, node):
         self._node = node
 
+    def node(self):
+        return self._node
+
     def select(self, query):
         return self._wrap_node_list(self.process_query(query), query)
 

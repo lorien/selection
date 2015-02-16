@@ -17,7 +17,7 @@ class XpathSelector(CommonSelectorMixin, LxmlSelectorMixin, SelectorInterface):
             XPATH_CACHE[query] = obj
         xpath_obj = XPATH_CACHE[query]
 
-        result = xpath_obj(self._node)
+        result = xpath_obj(self.node())
 
         # If you query XPATH like //some/crap/@foo="bar" then xpath function
         # returns boolean value instead of list of something.

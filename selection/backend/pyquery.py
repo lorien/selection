@@ -13,7 +13,7 @@ class PyquerySelector(CommonSelectorMixin, LxmlSelectorMixin,
     def pyquery_node(self):
         from pyquery import PyQuery
 
-        return PyQuery(self._node)
+        return PyQuery(self.node())
 
     def process_query(self, query):
         return self.pyquery_node().find(query)
