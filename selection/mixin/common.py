@@ -22,7 +22,7 @@ class CommonSelectorMixin(object):
             else:
                 return default
 
-    def rex(self, regexp, flags=0, byte=False):
+    def rex(self, regexp, flags=0):
         norm_regexp = rex_tools.normalize_regexp(regexp, flags)
         matches = list(norm_regexp.finditer(self.html()))
         return RexResultList(matches, source_rex=norm_regexp)

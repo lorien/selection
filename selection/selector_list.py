@@ -59,7 +59,8 @@ class SelectorList(object):
     def text_list(self, smart=False, normalize_space=True):
         result_list = []
         for item in self.selector_list:
-            result_list.append(item.text())
+            result_list.append(item.text(normalize_space=normalize_space,
+                                         smart=smart))
         return result_list
 
     def html(self, default=NULL, encoding='unicode'):
@@ -124,7 +125,7 @@ class SelectorList(object):
             result_list.append(item.attr(key, default=default))
         return result_list
 
-    def rex(self, regexp, flags=0, byte=False, default=NULL):
+    def rex(self, regexp, flags=0, default=NULL):
         try:
             sel = self.one()
         except IndexError:
@@ -133,7 +134,7 @@ class SelectorList(object):
             else:
                 return default
         else:
-            return sel.rex(regexp, flags=flags, byte=byte)
+            return sel.rex(regexp, flags=flags)
 
     def node_list(self):
         return [x.node() for x in self.selector_list]
@@ -141,7 +142,7 @@ class SelectorList(object):
     def select(self, query):
         result = SelectorList([], self.origin_selector_class,
                               self.origin_query + ' + ' + query)
-        for count, selector in enumerate(self.selector_list):
+        for selector in self.selector_list:
             result.selector_list.extend(selector.select(query))
         return result
 
