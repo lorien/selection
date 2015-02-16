@@ -1,14 +1,8 @@
 from setuptools import setup, find_packages
 
-"""
-with open('selection/version.py') as f:
-    code = compile(f.read(), 'version.py', 'exec')
-    exec(code, None, None)
-"""
-
 setup(
     name = 'selection',
-    version = '0.0.6',
+    version = '0.0.3',
     description = 'API to extract content from HTML & XML documents',
     author = 'Gregory Petukhov',
     author_email = 'lorien@lorien.name',
