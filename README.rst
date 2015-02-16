@@ -25,6 +25,8 @@ Usage Example
 
 Example::
 
+.. code:: python
+
     from selection import XpathSelector
     from lxml.html import fromstring
 
