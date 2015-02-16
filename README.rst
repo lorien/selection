@@ -35,7 +35,17 @@ Example::
     print(sel.select('//ul').attr('id')
 
 
+Installation
+============
+
+Run::
+
+    pip install selection
+
+
 Dependencies
 ============
 
 * lxml
+* tools
+* six
