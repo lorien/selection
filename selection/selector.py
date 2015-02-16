@@ -35,21 +35,21 @@ class SelectorInterface(metaclass_ABCMeta):
         "Not implemented"
 
     @abstractmethod
-    def html(self):
+    def html(self, **kwargs):
         "Not implemented"
 
     @abstractmethod
-    def attr(self):
+    def attr(self, **kwargs):
         "Not implemented"
 
     @abstractmethod
-    def text(self):
+    def text(self, **kwargs):
         "Not implemented"
 
     @abstractmethod
-    def number(self):
+    def number(self, **kwargs):
         "Not implemented"
 
     @abstractmethod
-    def rex(self):
+    def rex(self, **kwargs):
         "Not implemented"
