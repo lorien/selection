@@ -38,7 +38,7 @@ class TestSelector(TestCase):
 
     def test_select_node(self):
         sel = XpathSelector(self.tree)
-        self.assertEquals('test', sel.select('//h1')[0].node.text)
+        self.assertEquals('test', sel.select('//h1')[0]._node.text)
 
     def test_html(self):
         sel = XpathSelector(self.tree.xpath('//h1')[0])
@@ -146,7 +146,7 @@ class TestSelectorList(TestCase):
 
     def test_one(self):
         sel = XpathSelector(self.tree).select('//ul/li')
-        self.assertEquals('one', sel.one().node.text)
+        self.assertEquals('one', sel.one()._node.text)
         self.assertEquals('one', sel.text())
 
     def test_one_default(self):

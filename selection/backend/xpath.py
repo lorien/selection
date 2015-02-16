@@ -1,10 +1,12 @@
-from selection.backend.lxml_base import LxmlBaseSelector
+from selection.mixin.lxml import LxmlSelectorMixin
+from selection.mixin.common import CommonSelectorMixin
+from selection.selector import SelectorInterface
 
-
+__all__ = ('XpathSelector',)
 XPATH_CACHE = {}
 
 
-class XpathSelector(LxmlBaseSelector):
+class XpathSelector(CommonSelectorMixin, LxmlSelectorMixin, SelectorInterface):
     __slots__ = ()
 
     def process_query(self, query):
@@ -15,7 +17,7 @@ class XpathSelector(LxmlBaseSelector):
             XPATH_CACHE[query] = obj
         xpath_obj = XPATH_CACHE[query]
 
-        result = xpath_obj(self.node)
+        result = xpath_obj(self._node)
 
         # If you query XPATH like //some/crap/@foo="bar" then xpath function
         # returns boolean value instead of list of something.

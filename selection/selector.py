@@ -5,29 +5,24 @@ import logging
 from abc import ABCMeta, abstractmethod
 import six
 
-from tools.text import find_number
-from tools import rex as rex_tools
+from selection.selector_list import SelectorList
 
-from tools.const import NULL
-from selection.selector_list import SelectorList, RexResultList
-
-__all__ = ('BaseSelector',)
+__all__ = ('SelectorInterface',)
 XPATH_CACHE = {}
 logger = logging.getLogger('grab.selector.selector')
-
 metaclass_ABCMeta = ABCMeta('metaclass_ABCMeta', (object, ), {})
 
 
-class BaseSelector(metaclass_ABCMeta):
-    __slots__ = ('node',)
+class SelectorInterface(metaclass_ABCMeta):
+    __slots__ = ('_node',)
 
     def __init__(self, node):
-        self.node = node
+        self._node = node
 
     def select(self, query):
-        return self.wrap_node_list(self.process_query(query), query)
+        return self._wrap_node_list(self.process_query(query), query)
 
-    def wrap_node_list(self, nodes, query):
+    def _wrap_node_list(self, nodes, query):
         from selection.backend.text import TextSelector
 
         selector_list = []
@@ -50,19 +45,10 @@ class BaseSelector(metaclass_ABCMeta):
     def text(self):
         "Not implemented"
 
-    def number(self, default=NULL, ignore_spaces=False,
-               smart=False, make_int=True):
-        try:
-            return find_number(self.text(smart=smart),
-                               ignore_spaces=ignore_spaces,
-                               make_int=make_int)
-        except IndexError:
-            if default is NULL:
-                raise
-            else:
-                return default
+    @abstractmethod
+    def number(self):
+        "Not implemented"
 
-    def rex(self, regexp, flags=0, byte=False):
-        norm_regexp = rex_tools.normalize_regexp(regexp, flags)
-        matches = list(norm_regexp.finditer(self.html()))
-        return RexResultList(matches, source_rex=norm_regexp)
+    @abstractmethod
+    def rex(self):
+        "Not implemented"

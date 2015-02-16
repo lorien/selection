@@ -3,6 +3,7 @@ from tools.error import DataNotFound
 from tools.text import normalize_space as normalize_space_func
 from tools.html import decode_entities
 
+__all__ = ('SelectorList', 'RexResultList')
 
 class SelectorList(object):
     __slots__ = ('selector_list', 'origin_selector_class', 'origin_query')
@@ -34,7 +35,7 @@ class SelectorList(object):
 
     def node(self, default=NULL):
         try:
-            return self.one().node
+            return self.one()._node
         except IndexError:
             if default is NULL:
                 m = 'Could not get first item for %s query of class %s'\
@@ -134,7 +135,7 @@ class SelectorList(object):
             return sel.rex(regexp, flags=flags, byte=byte)
 
     def node_list(self):
-        return [x.node for x in self.selector_list]
+        return [x._node for x in self.selector_list]
 
     def select(self, query):
         result = SelectorList([], self.origin_selector_class,
