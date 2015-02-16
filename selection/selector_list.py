@@ -5,6 +5,7 @@ from tools.html import decode_entities
 
 __all__ = ('SelectorList', 'RexResultList')
 
+
 class SelectorList(object):
     __slots__ = ('selector_list', 'origin_selector_class', 'origin_query')
 

@@ -4,7 +4,6 @@ from lxml.html import fromstring
 from tools.error import DataNotFound
 
 from selection import XpathSelector
-from selection.backend.text import TextSelector
 from selection.backend.pyquery import PyquerySelector
 from selection.selector_list import RexResultList
 from selection.error import SelectionRuntimeError
@@ -66,7 +65,7 @@ class TestSelector(TestCase):
 
     def test_text_selector(self):
         sel = XpathSelector(self.tree).select('//li/text()').one()
-        self.assertTrue(isinstance(sel, TextSelector))
+        self.assertTrue(sel.is_text_node())
         self.assertEquals('one', XpathSelector(self.tree).select('//li/text()')
                                                          .text())
 

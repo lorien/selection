@@ -3,7 +3,6 @@ Selector module provides high usability interface to lxml tree
 """
 import logging
 from abc import ABCMeta, abstractmethod
-import six
 
 from selection.selector_list import SelectorList
 
@@ -23,15 +22,14 @@ class SelectorInterface(metaclass_ABCMeta):
         return self._wrap_node_list(self.process_query(query), query)
 
     def _wrap_node_list(self, nodes, query):
-        from selection.backend.text import TextSelector
-
         selector_list = []
         for node in nodes:
-            if isinstance(node, six.string_types):
-                selector_list.append(TextSelector(node))
-            else:
-                selector_list.append(self.__class__(node))
+            selector_list.append(self.__class__(node))
         return SelectorList(selector_list, self.__class__, query)
+
+    @abstractmethod
+    def is_text_node(self):
+        "Not implemented"
 
     @abstractmethod
     def html(self):
