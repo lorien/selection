@@ -5,6 +5,7 @@ import logging
 from abc import ABCMeta, abstractmethod
 
 from selection.selector_list import SelectorList
+from tools.const import NULL
 
 __all__ = ('SelectorInterface',)
 XPATH_CACHE = {}
@@ -35,21 +36,22 @@ class SelectorInterface(metaclass_ABCMeta):
         "Not implemented"
 
     @abstractmethod
-    def html(self, **kwargs):
+    def html(self, encoding='unicode'):
         "Not implemented"
 
     @abstractmethod
-    def attr(self, **kwargs):
+    def attr(self, key, default=NULL):
         "Not implemented"
 
     @abstractmethod
-    def text(self, **kwargs):
+    def text(self, smart=False, normalize_space=True):
         "Not implemented"
 
     @abstractmethod
-    def number(self, **kwargs):
+    def number(self, default=NULL, ignore_spaces=False,
+               smart=False, make_int=True):
         "Not implemented"
 
     @abstractmethod
-    def rex(self, **kwargs):
+    def rex(self, regexp, flags=0):
         "Not implemented"

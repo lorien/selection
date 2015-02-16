@@ -12,12 +12,6 @@ __all__ = ('LxmlSelector',)
 class LxmlSelector(CommonSelector):
     __slots__ = ()
 
-    def html(self, encoding='unicode'):
-        if self.is_text_node():
-            return self.node()
-        else:
-            return render_html(self.node(), encoding=encoding)
-
     def is_text_node(self):
         return isinstance(self.node(), six.string_types)
 
@@ -26,6 +20,12 @@ class LxmlSelector(CommonSelector):
             raise SelectionRuntimeError('Text node selectors do not '
                                         'allow select method')
         return super(LxmlSelector, self).select(query)
+
+    def html(self, encoding='unicode'):
+        if self.is_text_node():
+            return self.node()
+        else:
+            return render_html(self.node(), encoding=encoding)
 
     def attr(self, key, default=NULL):
         if self.is_text_node():
