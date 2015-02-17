@@ -1,20 +1,28 @@
 #!/usr/bin/env python
 # coding: utf-8
+"""
+This is launcher of tests of `selection` package.
+
+To run the script use `run` command from the `selection` package::
+
+    $ run test
+"""
 import unittest
 import sys
-from copy import copy
-import os
 
 TEST_LIST = (
     'test.basic',
     'test.selector',
 )
 
+
 def setup_arg_parser(parser):
+    "Setup command line parser of `test` script"
     parser.add_argument('-t', '--test-only', help='Run only specified tests')
 
 
-def main(test_only, **kwargs):
+def main(test_only, **kwargs): # pylint: disable=unused-argument
+    "Main logic of `test` script."
     if test_only:
         test_list = [test_only]
     else:

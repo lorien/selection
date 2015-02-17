@@ -1,8 +1,5 @@
 flake:
-	flake8 selection test
-
-flake_verbose:
-	flake8 selection test --show-pep8
+	flake8 selection test script
 
 test:
 	run test
@@ -18,5 +15,8 @@ clean:
 
 upload:
 	python setup.py sdist upload
+
+pylint:
+	pylint --reports=n script test selection
 
 .PHONY: all build venv flake test vtest testloop cov clean doc
