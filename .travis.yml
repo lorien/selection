@@ -5,7 +5,7 @@ python:
   - "3.4"
 
 install:
-  - pip install requirements_dev.txt
+  - pip install -r requirements_dev.txt
   - python setup.py develop
 
 script:
