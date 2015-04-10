@@ -5,7 +5,7 @@ import logging
 from abc import ABCMeta, abstractmethod
 
 from selection.selector_list import SelectorList
-from tools.const import NULL
+from weblib.const import NULL
 
 __all__ = ('SelectorInterface',)
 XPATH_CACHE = {}

@@ -1,8 +1,8 @@
 import six
-from tools.etree import get_node_text, render_html
-from tools.text import normalize_space as normalize_space_func
-from tools.const import NULL
-from tools.error import DataNotFound
+from weblib.etree import get_node_text, render_html
+from weblib.text import normalize_space as normalize_space_func
+from weblib.const import NULL
+from weblib.error import DataNotFound
 from selection.error import SelectionRuntimeError
 from selection.backend.common import CommonSelector
 

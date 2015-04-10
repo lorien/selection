@@ -1,7 +1,7 @@
 # coding: utf-8
 from unittest import TestCase
 from lxml.html import fromstring
-from tools.error import DataNotFound
+from weblib.error import DataNotFound
 
 from selection import XpathSelector
 from selection.backend.pyquery import PyquerySelector

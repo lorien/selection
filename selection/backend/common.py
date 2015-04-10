@@ -1,7 +1,7 @@
-from tools.text import find_number
-from tools import rex as rex_tools
+from weblib.text import find_number
+from weblib import rex as rex_tools
 
-from tools.const import NULL
+from weblib.const import NULL
 from selection.selector_list import RexResultList
 from selection.selector import SelectorInterface
 

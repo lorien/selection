@@ -6,7 +6,7 @@ setup(
     description = 'API to extract content from HTML & XML documents',
     author = 'Gregory Petukhov',
     author_email = 'lorien@lorien.name',
-    install_requires = ['lxml', 'tools', 'six'],
+    install_requires = ['lxml', 'weblib', 'six'],
     packages = ['selection', 'selection.backend', 'script', 'test'],
     license = "MIT",
     classifiers = (

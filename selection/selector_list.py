@@ -1,7 +1,7 @@
-from tools.const import NULL
-from tools.error import DataNotFound
-from tools.text import normalize_space as normalize_space_func
-from tools.html import decode_entities
+from weblib.const import NULL
+from weblib.error import DataNotFound
+from weblib.text import normalize_space as normalize_space_func
+from weblib.html import decode_entities
 
 __all__ = ('SelectorList', 'RexResultList')
 
