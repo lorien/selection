@@ -1,6 +1,7 @@
-runscript
 coverage
 coveralls
 flake8
 pyquery
 bumpversion
+pytest
+pytest-cov

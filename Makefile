@@ -1,13 +1,11 @@
 flake:
-	flake8 selection test script
+	flake8 selection test
 
 test:
-	run test
+	py.test
 
 coverage:
-	coverage erase
-	coverage run --source=selection -m runscript.cli test
-	coverage report -m
+	py.test --cov weblib --cov-report term-missing
 
 clean:
 	find -name '*.pyc' -delete
@@ -17,6 +15,6 @@ upload:
 	python setup.py sdist upload
 
 pylint:
-	pylint --reports=n script test selection
+	pylint --reports=n test selection
 
 .PHONY: all build venv flake test vtest testloop cov clean doc

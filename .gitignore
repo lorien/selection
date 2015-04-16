@@ -13,3 +13,4 @@
 /.tox/
 /.coverage
 /dist/
+/coverage.xml

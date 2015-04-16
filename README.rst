@@ -40,9 +40,11 @@ Example:
 Installation
 ============
 
-Run::
+Run:
 
-    pip install selection
+.. code:: shell
+
+    pip install -U selection
 
 
 Dependencies
