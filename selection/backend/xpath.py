@@ -3,6 +3,7 @@ from selection.backend.lxml import LxmlSelector
 
 __all__ = ('XpathSelector',)
 XPATH_CACHE = {}
+REGEXP_NS = 'http://exslt.org/regular-expressions'
 
 
 class XpathSelector(LxmlSelector):
@@ -12,7 +13,7 @@ class XpathSelector(LxmlSelector):
         from lxml.etree import XPath
 
         if query not in XPATH_CACHE:
-            obj = XPath(query)
+            obj = XPath(query, namespaces={'re': REGEXP_NS})
             XPATH_CACHE[query] = obj
         xpath_obj = XPATH_CACHE[query]
 

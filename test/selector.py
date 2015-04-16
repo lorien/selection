@@ -28,7 +28,7 @@ HTML = """
 """
 
 
-class TestSelector(TestCase):
+class TestXpathSelector(TestCase):
     def setUp(self):
         self.tree = fromstring(HTML)
 
@@ -126,20 +126,17 @@ class TestSelector(TestCase):
         sel = XpathSelector(self.tree).select('//li/text()').one()
         self.assertRaises(SelectionRuntimeError, sel.attr, 'foo')
 
-    """
-    def test_base_selector_html(self):
-        class ChildSelector(BaseSelector):
-            def html(self):
-                pass
-
-            def text(self):
-                pass
-
-        sel = ChildSelector(self.tree)
-    """
+    def test_regexp(self):
+        html = '<div><h1 id="h1">foo</h1><h2>bar</h2></div>'
+        sel = XpathSelector(fromstring(html))
+        self.assertEqual('h2', sel.select('//*[re:test(text(), "b.r")]')\
+                                  .node().tag)
+        self.assertEqual('foo', sel.select('//*[re:test(@id, "^h\d+$")]'
+                                           '/text()').text())
 
 
-class TestSelectorList(TestCase):
+
+class TestXpathSelectorList(TestCase):
     def setUp(self):
         self.tree = fromstring(HTML)
 
