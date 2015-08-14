@@ -7,7 +7,7 @@ setup(
     author = 'Gregory Petukhov',
     author_email = 'lorien@lorien.name',
     install_requires = ['lxml', 'weblib', 'six'],
-    packages = ['selection', 'selection.backend', 'test'],
+    packages = find_packages(exclude=['test']),
     license = "MIT",
     classifiers = (
         'Programming Language :: Python',
