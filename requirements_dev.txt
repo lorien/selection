@@ -5,3 +5,4 @@ pyquery
 bumpversion
 pytest
 pytest-cov
+#cssselect

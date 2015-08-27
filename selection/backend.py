@@ -86,3 +86,13 @@ class PyquerySelector(LxmlNodeSelector):
 
     def process_query(self, query):
         return self.pyquery_node().find(query)
+
+
+#class CssSelector(XpathSelector):
+#    __slots__ = ()
+#
+#    def process_query(self, query):
+#        from cssselect import HTMLTranslator
+#
+#        xpath_query = HTMLTranslator().css_to_xpath(query) 
+#        return super(CssSelector, self).process_query(xpath_query)

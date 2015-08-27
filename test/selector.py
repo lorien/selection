@@ -3,7 +3,7 @@ from unittest import TestCase
 from lxml.html import fromstring
 from weblib.error import DataNotFound
 
-from selection.backend import XpathSelector, PyquerySelector
+from selection.backend import XpathSelector, PyquerySelector#, CssSelector
 from selection.base import RexResultList
 from selection.error import SelectionRuntimeError
 
@@ -34,6 +34,29 @@ class PyqueryTestCase(TestCase):
     def test_pyquery_selector(self):
         sel = PyquerySelector(self.tree)
         self.assertEquals('one', sel.select('li').text())
+        self.assertEquals('yet one', sel.select('.li-1').text())
+
+    def test_nested_selector(self):
+        sel = PyquerySelector(self.tree)
+        sel2 = sel.select('ul')
+        self.assertEquals('yet one', sel2.select('li[@class]').text())
+
+
+#class CSSTestCase(TestCase):
+#    def setUp(self):
+#        self.tree = fromstring(HTML)
+#
+#    def test_css_selector(self):
+#        sel = CssSelector(self.tree)
+#        self.assertEquals('one', sel.select('li').text())
+#        self.assertEquals('three', sel.select('li:contains("ree")').text())
+#        self.assertEquals('yet one', sel.select('.li-1').text())
+#
+#    # TODO: That does not work!
+#    def test_nested_selector(self):
+#        sel = CssSelector(self.tree)
+#        sel2 = sel.select('ul')
+#        self.assertEquals('yet one', sel2.select('li[@class]').text())
 
 
 class TestXpathSelector(TestCase):
