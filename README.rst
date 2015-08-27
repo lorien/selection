@@ -8,10 +8,10 @@ Selection
 .. image:: https://coveralls.io/repos/lorien/selection/badge.svg?branch=master
     :target: https://coveralls.io/r/lorien/selection?branch=master
 
-.. image:: https://pypip.in/download/selection/badge.svg?period=month
+.. image:: https://img.shields.io/pypi/dm/selection.svg
     :target: https://pypi.python.org/pypi/selection
 
-.. image:: https://pypip.in/version/selection/badge.svg
+.. image:: https://img.shields.io/pypi/v/selection.svg
     :target: https://pypi.python.org/pypi/selection
 
 .. image:: https://landscape.io/github/lorien/selection/master/landscape.png
