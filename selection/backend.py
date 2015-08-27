@@ -3,13 +3,16 @@ from weblib.etree import get_node_text, render_html
 from weblib.text import normalize_space as normalize_space_func
 from weblib.const import NULL
 from weblib.error import DataNotFound
+
+from selection.base import Selector
 from selection.error import SelectionRuntimeError
-from selection.backend.common import CommonSelector
 
-__all__ = ('LxmlSelector',)
+__all__ = ['XpathSelector', 'PyquerySelector']
+XPATH_CACHE = {}
+REGEXP_NS = 'http://exslt.org/regular-expressions'
 
 
-class LxmlSelector(CommonSelector):
+class LxmlNodeSelector(Selector):
     __slots__ = ()
 
     def is_text_node(self):
@@ -19,7 +22,7 @@ class LxmlSelector(CommonSelector):
         if self.is_text_node():
             raise SelectionRuntimeError('Text node selectors do not '
                                         'allow select method')
-        return super(LxmlSelector, self).select(query)
+        return super(LxmlNodeSelector, self).select(query)
 
     def html(self, encoding='unicode'):
         if self.is_text_node():
@@ -48,3 +51,38 @@ class LxmlSelector(CommonSelector):
         else:
             return get_node_text(self.node(), smart=smart,
                                  normalize_space=normalize_space)
+
+
+class XpathSelector(LxmlNodeSelector):
+    __slots__ = ()
+
+    def process_query(self, query):
+        from lxml.etree import XPath
+
+        if query not in XPATH_CACHE:
+            obj = XPath(query, namespaces={'re': REGEXP_NS})
+            XPATH_CACHE[query] = obj
+        xpath_obj = XPATH_CACHE[query]
+
+        result = xpath_obj(self.node())
+
+        # If you query XPATH like //some/crap/@foo="bar" then xpath function
+        # returns boolean value instead of list of something.
+        # To work around this problem I just returns empty list.
+        # This is not great solutions but it produces less confusing error.
+        if isinstance(result, bool):
+            result = []
+
+        return result
+
+
+class PyquerySelector(LxmlNodeSelector):
+    __slots__ = ()
+
+    def pyquery_node(self):
+        from pyquery import PyQuery
+
+        return PyQuery(self.node())
+
+    def process_query(self, query):
+        return self.pyquery_node().find(query)

@@ -3,9 +3,8 @@ from unittest import TestCase
 from lxml.html import fromstring
 from weblib.error import DataNotFound
 
-from selection import XpathSelector
-from selection.backend.pyquery import PyquerySelector
-from selection.selector_list import RexResultList
+from selection.backend import XpathSelector, PyquerySelector
+from selection.base import RexResultList
 from selection.error import SelectionRuntimeError
 
 
@@ -26,6 +25,15 @@ HTML = """
     </body>
 </html>
 """
+
+
+class PyqueryTestCase(TestCase):
+    def setUp(self):
+        self.tree = fromstring(HTML)
+
+    def test_pyquery_selector(self):
+        sel = PyquerySelector(self.tree)
+        self.assertEquals('one', sel.select('li').text())
 
 
 class TestXpathSelector(TestCase):
@@ -109,10 +117,6 @@ class TestXpathSelector(TestCase):
         sel = XpathSelector(self.tree)
         self.assertTrue(isinstance(sel.select('//li')
                                       .rex('\w*'), RexResultList))
-
-    def test_pyquery_selector(self):
-        sel = PyquerySelector(self.tree)
-        self.assertEquals('one', sel.select('li').text())
 
     def test_text_selector_select(self):
         sel = XpathSelector(self.tree).select('//li/text()').one()

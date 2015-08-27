@@ -1,9 +1,62 @@
+import logging
 from weblib.const import NULL
 from weblib.error import DataNotFound
 from weblib.text import normalize_space as normalize_space_func
 from weblib.html import decode_entities
+from weblib.text import find_number
+from weblib import rex as rex_tools
 
-__all__ = ('SelectorList', 'RexResultList')
+__all__ = ['Selector', 'SelectorList', 'RexResultList']
+logger = logging.getLogger('selection.base')
+XPATH_CACHE = {}
+
+
+class Selector(object):
+    __slots__ = ('_node',)
+
+    def __init__(self, node):
+        self._node = node
+
+    def node(self):
+        return self._node
+
+    def select(self, query):
+        return self._wrap_node_list(self.process_query(query), query)
+
+    def _wrap_node_list(self, nodes, query):
+        selector_list = []
+        for node in nodes:
+            selector_list.append(self.__class__(node))
+        return SelectorList(selector_list, self.__class__, query)
+
+    def is_text_node(self):
+        raise NotImplementedError
+
+    def html(self, encoding='unicode'):
+        raise NotImplementedError
+
+    def attr(self, key, default=NULL):
+        raise NotImplementedError
+
+    def text(self, smart=False, normalize_space=True):
+        raise NotImplementedError
+
+    def number(self, default=NULL, ignore_spaces=False,
+               smart=False, make_int=True):
+        try:
+            return find_number(self.text(smart=smart),
+                               ignore_spaces=ignore_spaces,
+                               make_int=make_int)
+        except IndexError:
+            if default is NULL:
+                raise
+            else:
+                return default
+
+    def rex(self, regexp, flags=0):
+        norm_regexp = rex_tools.normalize_regexp(regexp, flags)
+        matches = list(norm_regexp.finditer(self.html()))
+        return RexResultList(matches, source_rex=norm_regexp)
 
 
 class SelectorList(object):
