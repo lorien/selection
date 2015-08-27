@@ -42,7 +42,7 @@ Installation
 
 Run:
 
-.. code:: shell
+.. code:: bash
 
     pip install -U selection
 
