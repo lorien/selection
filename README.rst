@@ -14,9 +14,6 @@ Selection
 .. image:: https://img.shields.io/pypi/v/selection.svg
     :target: https://pypi.python.org/pypi/selection
 
-.. image:: https://landscape.io/github/lorien/selection/master/landscape.png
-   :target: https://landscape.io/github/lorien/selection/master
-
 API to extract data from HTML and XML documents.
 
 
