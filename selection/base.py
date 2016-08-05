@@ -127,6 +127,18 @@ class SelectorList(object):
         else:
             return sel.html(encoding=encoding)
 
+    def inner_html(self, default=NULL, encoding='unicode'):
+        try:
+            sel = self.one()
+        except IndexError:
+            if default is NULL:
+                raise
+            else:
+                return default
+        else:
+            result_list = [item.html(encoding=encoding) for item in sel.select('./*')]
+            return ''.join(result_list).strip()
+
     def number(self, default=NULL, ignore_spaces=False,
                smart=False, make_int=True):
         """
