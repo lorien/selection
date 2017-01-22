@@ -10,7 +10,6 @@ install:
   - pip install tox
 
 script:
-  - pip install -U pip setuptools
   - tox -e $TOX_ENV
 
 after_success:
