@@ -209,6 +209,15 @@ class TestXpathSelectorList(TestCase):
         self.assertRaises(DataNotFound, sel.html)
         self.assertEquals('DEFAULT', sel.html(default='DEFAULT'))
 
+    def test_inner_html(self):
+        sel = XpathSelector(self.tree).select('//ul[@id="second-list"]')
+        self.assertEquals(u'<li class="li-1">yet one</li>\n            <li class="li-2">yet two</li>', sel.inner_html().strip())
+
+    def test_inner_html_default(self):
+        sel = XpathSelector(self.tree).select('//ul/li[10]')
+        self.assertRaises(DataNotFound, sel.inner_html)
+        self.assertEquals('DEFAULT', sel.inner_html(default='DEFAULT'))
+
     def test_number(self):
         sel = XpathSelector(self.tree).select('//ul/li[4]')
         self.assertEquals(4, sel.number())
