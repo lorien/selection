@@ -73,6 +73,9 @@ class XpathSelector(LxmlNodeSelector):
         if isinstance(result, bool):
             result = []
 
+        if isinstance(result, six.string_types):
+            result = [result]
+
         return result
 
 

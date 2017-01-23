@@ -161,6 +161,11 @@ class TestXpathSelector(TestCase):
         self.assertEqual('foo', sel.select('//*[re:test(@id, "^h\d+$")]'
                                            '/text()').text())
 
+    def test_xpath_concat_function(self):
+        html = '<a href="index.html"></a>'
+        sel = XpathSelector(fromstring(html))
+        self.assertEqual('/index.html', sel.select('concat("/",//a/@href)')\
+                                  .text())
 
 
 class TestXpathSelectorList(TestCase):
