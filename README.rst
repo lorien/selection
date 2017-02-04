@@ -41,6 +41,7 @@ Run:
 
 .. code:: bash
 
+    pip install -U pip setuptools
     pip install -U selection
 
 
