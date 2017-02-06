@@ -4,17 +4,13 @@ Selection
 
 .. image:: https://travis-ci.org/lorien/selection.png?branch=master
     :target: https://travis-ci.org/lorien/selection
+    :alt: Travis CI
 
 .. image:: https://coveralls.io/repos/lorien/selection/badge.svg?branch=master
     :target: https://coveralls.io/r/lorien/selection?branch=master
+    :alt: coveralls.io
 
-.. image:: https://img.shields.io/pypi/dm/selection.svg
-    :target: https://pypi.python.org/pypi/selection
-
-.. image:: https://img.shields.io/pypi/v/selection.svg
-    :target: https://pypi.python.org/pypi/selection
-
-API to extract data from HTML and XML documents.
+API to query DOM tree of HTML/XML document.
 
 
 Usage Example
