@@ -167,6 +167,17 @@ class TestXpathSelector(TestCase):
         self.assertEqual('/index.html', sel.select('concat("/",//a/@href)')\
                                   .text())
 
+    def test_context_manager_select_text(self):
+        html = '<b>one</b><b>two</b>'
+        with XpathSelector(fromstring(html)).select('b') as elem:
+            self.assertEqual('one', elem.text())
+
+    def test_context_manager_select_iter(self):
+        html = '<b>one</b><b>two</b>'
+        with XpathSelector(fromstring(html)).select('b') as qs:
+            vals = [x.text() for x in qs]
+            self.assertEqual(set(['one', 'two']), set(vals))
+
 
 class TestXpathSelectorList(TestCase):
     def setUp(self):

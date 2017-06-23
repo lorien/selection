@@ -67,6 +67,12 @@ class SelectorList(object):
         self.origin_selector_class = origin_selector_class
         self.origin_query = origin_query
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        pass
+
     def __getitem__(self, x):
         return self.selector_list[x]
 
