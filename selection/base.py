@@ -1,6 +1,6 @@
 import logging
 from weblib.const import NULL
-from weblib.error import DataNotFound
+from weblib.error import DataNotFound, RequiredDataNotFound
 from weblib.text import normalize_space as normalize_space_func
 from weblib.html import decode_entities
 from weblib.text import find_number
@@ -169,15 +169,18 @@ class SelectorList(object):
 
         return len(self.selector_list) > 0
 
-    def assert_exists(self):
+    def require(self):
         """
-        Return True if selector list is not empty.
+        Raise RequiredDataNotFound if selector data does not exist.
         """
 
         if not self.exists():
-            args = (self.origin_query, self.origin_selector_class.__name__)
-            raise DataNotFound(u'Node does not exists, query: %s, '
-                               u'query type: %s' % args)
+            raise RequiredDataNotFound(
+                u'Node does not exists, query: %s, query type: %s' % (
+                    self.origin_query,
+                    self.origin_selector_class.__name__,
+                )
+            )
 
     def attr(self, key, default=NULL):
         try:

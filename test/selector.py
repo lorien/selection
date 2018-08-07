@@ -1,7 +1,7 @@
 # coding: utf-8
 from unittest import TestCase
 from lxml.html import fromstring
-from weblib.error import DataNotFound
+from weblib.error import DataNotFound, RequiredDataNotFound
 
 from selection.backend import XpathSelector, PyquerySelector#, CssSelector
 from selection.base import RexResultList
@@ -238,13 +238,6 @@ class TestXpathSelectorList(TestCase):
         self.assertRaises(DataNotFound, sel.number)
         self.assertEquals('DEFAULT', sel.number(default='DEFAULT'))
 
-    def test_assert_exists(self):
-        sel = XpathSelector(self.tree).select('//ul/li')
-        sel.assert_exists()
-
-        sel = XpathSelector(self.tree).select('//ul/li[10]')
-        self.assertRaises(DataNotFound, sel.assert_exists)
-
     def test_exists(self):
         sel = XpathSelector(self.tree).select('//ul/li[4]')
         self.assertEquals(True, sel.exists())
@@ -287,6 +280,14 @@ class TestXpathSelectorList(TestCase):
     def test_node_list(self):
         sel = XpathSelector(self.tree).select('//ul/li')
         self.assertEquals(self.tree.xpath('//ul/li'), sel.node_list())
+
+    def test_require(self):
+        XpathSelector(self.tree).select('//ul').require()
+
+        self.assertRaises(
+            RequiredDataNotFound,
+            XpathSelector(self.tree).select('//foo').require
+        )
 
 
 class RexResultListTestCase(TestCase):
