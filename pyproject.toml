@@ -31,7 +31,6 @@ classifiers = [
 ]
 dependencies = [
     'lxml;platform_system!="Windows"',
-    "weblib",
 ]
 
 [project.optional-dependencies]
@@ -59,10 +58,6 @@ line_length = 88
 # B101 assert_used
 # B410 Using HtmlElement to parse untrusted XML data
 skips = ["B101", "B410"]
-
-[[tool.mypy.overrides]]
-module = "weblib.*"
-ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = "pyquery"

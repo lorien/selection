@@ -5,9 +5,9 @@ build
 twine
 pyquery
 
-#coverage
+coverage
 #coveralls
-#pytest-cov
+pytest-cov
 #cssselect
 
 # types

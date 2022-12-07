@@ -3,13 +3,11 @@ from collections.abc import Iterable
 from typing import Any, Protocol, TypeVar, cast
 
 from lxml.etree import XPath, _Element
-from weblib.error import DataNotFound
-from weblib.etree import get_node_text, render_html
-from weblib.text import normalize_space as normalize_space_func
 
-from selection.base import Selector, SelectorList
-from selection.const import UNDEFINED
-from selection.error import SelectionRuntimeError
+from . import util
+from .base import Selector, SelectorList
+from .const import UNDEFINED
+from .errors import DataNotFound, SelectionRuntimeError
 
 __all__ = ["XpathSelector"]
 XPATH_CACHE = {}
@@ -43,10 +41,10 @@ class LxmlNodeSelector(Selector[LxmlNodeT]):
             )
         return super().select(query)
 
-    def html(self, encoding: str = "unicode") -> str:
+    def html(self) -> str:
         if self.is_text_node():
             return str(self.node())
-        return str(render_html(self.node(), encoding=encoding))
+        return util.render_html(cast(_Element, self.node()))
 
     def attr(self, key: str, default: Any = UNDEFINED) -> Any:
         if self.is_text_node():
@@ -60,10 +58,14 @@ class LxmlNodeSelector(Selector[LxmlNodeT]):
     def text(self, smart: bool = False, normalize_space: bool = True) -> str:
         if self.is_text_node():
             if normalize_space:
-                return str(normalize_space_func(self.node()))
+                return util.normalize_spaces(cast(str, self.node()))
             return str(self.node())
         return str(
-            get_node_text(self.node(), smart=smart, normalize_space=normalize_space)
+            util.get_node_text(
+                cast(_Element, self.node()),
+                smart=smart,
+                normalize_space=normalize_space,
+            )
         )
 
 

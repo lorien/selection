@@ -46,4 +46,4 @@ build:
 	python -m build --sdist
 
 coverage:
-	pytest --cov weblib --cov-report term-missing
+	pytest --cov selection --cov-report term-missing

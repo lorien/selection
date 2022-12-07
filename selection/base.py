@@ -1,17 +1,14 @@
 import logging
+import re
 from abc import abstractmethod
 from collections.abc import Iterable
 from re import Match, Pattern
 from types import TracebackType
-from typing import Any, Generic, TypeVar
+from typing import Any, Generic, TypeVar, Union
 
-from weblib import rex as rex_tools
-from weblib.error import DataNotFound, RequiredDataNotFound
-from weblib.html import decode_entities
-from weblib.text import find_number
-from weblib.text import normalize_space as normalize_space_func
-
-from selection.const import UNDEFINED
+from . import util
+from .const import UNDEFINED
+from .errors import DataNotFound
 
 __all__ = ["Selector", "SelectorList", "RexResultList"]
 LOG = logging.getLogger("selection.base")
@@ -42,7 +39,7 @@ class Selector(Generic[T]):
         raise NotImplementedError
 
     @abstractmethod
-    def html(self, encoding: str = "unicode") -> str:
+    def html(self) -> str:
         raise NotImplementedError
 
     def attr(self, key: str, default: Any = UNDEFINED) -> Any:
@@ -59,7 +56,7 @@ class Selector(Generic[T]):
         make_int: bool = True,
     ) -> Any:
         try:
-            return find_number(
+            return util.find_number(
                 self.text(smart=smart), ignore_spaces=ignore_spaces, make_int=make_int
             )
         except IndexError:
@@ -68,12 +65,13 @@ class Selector(Generic[T]):
             return default
 
     def rex(
-        self, regexp: Pattern[str], flags: int = 0
+        self, regexp: Union[str, Pattern[str]], flags: int = 0
     ) -> "RexResultList":  # pylint: disable=used-before-assignment
 
-        norm_regexp = rex_tools.normalize_regexp(regexp, flags)
-        matches = list(norm_regexp.finditer(self.html()))
-        return RexResultList(matches, source_rex=norm_regexp)
+        if isinstance(regexp, str):
+            regexp = re.compile(regexp, flags)
+        matches = list(regexp.finditer(self.html()))
+        return RexResultList(matches, source_rex=regexp)
 
 
 class SelectorList(Generic[T]):
@@ -155,7 +153,7 @@ class SelectorList(Generic[T]):
             result_list.append(item.text(normalize_space=normalize_space, smart=smart))
         return result_list
 
-    def html(self, default: Any = UNDEFINED, encoding: str = "unicode") -> Any:
+    def html(self, default: Any = UNDEFINED) -> Any:
         try:
             sel = self.one()
         except IndexError:
@@ -163,9 +161,9 @@ class SelectorList(Generic[T]):
                 raise
             return default
         else:
-            return sel.html(encoding=encoding)
+            return sel.html()
 
-    def inner_html(self, default: Any = UNDEFINED, encoding: str = "unicode") -> Any:
+    def inner_html(self, default: Any = UNDEFINED) -> Any:
         try:
             sel = self.one()
         except IndexError:
@@ -173,7 +171,7 @@ class SelectorList(Generic[T]):
                 raise
             return default
         else:
-            result_list = [item.html(encoding=encoding) for item in sel.select("./*")]
+            result_list = [item.html() for item in sel.select("./*")]
             return "".join(result_list).strip()
 
     def number(
@@ -203,9 +201,9 @@ class SelectorList(Generic[T]):
         return len(self.selector_list) > 0
 
     def require(self) -> None:
-        """Raise RequiredDataNotFound if selector data does not exist."""
+        """Raise DataNotFound if selector data does not exist."""
         if not self.exists():
-            raise RequiredDataNotFound(
+            raise DataNotFound(
                 "Node does not exists, query: %s, query type: %s"
                 % (
                     self.origin_query,
@@ -268,7 +266,7 @@ class RexResultList:
 
     def text(self, default: Any = UNDEFINED) -> Any:
         try:
-            return normalize_space_func(decode_entities(self.one().group(1)))
+            return util.normalize_spaces(util.decode_entities(self.one().group(1)))
         except (AttributeError, IndexError) as ex:
             if default is UNDEFINED:
                 raise DataNotFound from ex

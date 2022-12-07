@@ -2,12 +2,11 @@
 from unittest import TestCase
 
 from lxml.html import fromstring
-from weblib.error import DataNotFound, RequiredDataNotFound
 
 from selection.backend_lxml import XpathSelector
 from selection.backend_pyquery import PyquerySelector
 from selection.base import RexResultList
-from selection.error import SelectionRuntimeError
+from selection.errors import DataNotFound, SelectionRuntimeError
 
 HTML = """
 <html>
@@ -289,7 +288,7 @@ class TestXpathSelectorList(TestCase):  # pylint: disable=too-many-public-method
         XpathSelector(self.tree).select("//ul").require()
 
         self.assertRaises(
-            RequiredDataNotFound, XpathSelector(self.tree).select("//foo").require
+            DataNotFound, XpathSelector(self.tree).select("//foo").require
         )
 
 
