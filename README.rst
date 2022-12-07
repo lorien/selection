@@ -46,4 +46,3 @@ Dependencies
 
 * lxml
 * tools
-* six

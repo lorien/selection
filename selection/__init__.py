@@ -1,6 +1,4 @@
-from weblib.const import NULL  # noqa
+from selection.backend_lxml import XpathSelector
+from selection.base import RexResultList, Selector, SelectorList
 
-from selection.base import Selector, SelectorList, RexResultList  # noqa
-from selection.backend import XpathSelector  # noqa
-
-version = '0.0.14'
+__version__ = "0.0.14"
