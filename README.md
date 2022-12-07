@@ -23,3 +23,10 @@ print(sel.select('//ul').attr('id')
 ## Installation
 
 Run: `pip install -U selection`
+
+
+## Community
+
+Telegram English chat: [https://t.me/grablab](https://t.me/grablab)
+
+Telegram Russian chat: [https://t.me/grablab\_ru](https://t.me/grablab_ru)
