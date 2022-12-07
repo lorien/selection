@@ -6,7 +6,6 @@ from lxml.html import fromstring
 from selection.backend_lxml import XpathSelector
 from selection.backend_pyquery import PyquerySelector
 from selection.base import RexResultList
-from selection.errors import SelectionRuntimeError
 
 HTML = """
 <html>
@@ -142,7 +141,7 @@ class TestXpathSelector(TestCase):  # pylint: disable=too-many-public-methods
 
     def test_text_selector_select(self):
         sel = XpathSelector(self.tree).select("//li/text()").one()
-        self.assertRaises(SelectionRuntimeError, lambda: sel.select("foo"))
+        self.assertRaises(TypeError, lambda: sel.select("foo"))
 
     def test_text_selector_html(self):
         sel = XpathSelector(self.tree).select("//li/text()").one()
@@ -150,7 +149,7 @@ class TestXpathSelector(TestCase):  # pylint: disable=too-many-public-methods
 
     def test_text_selector_attr(self):
         sel = XpathSelector(self.tree).select("//li/text()").one()
-        self.assertRaises(SelectionRuntimeError, sel.attr, "foo")
+        self.assertRaises(TypeError, sel.attr, "foo")
 
     def test_regexp(self):
         html = '<div><h1 id="h1">foo</h1><h2>bar</h2></div>'

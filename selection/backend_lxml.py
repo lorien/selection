@@ -7,7 +7,6 @@ from lxml.etree import XPath, _Element
 from . import util
 from .base import Selector, SelectorList
 from .const import UNDEFINED
-from .errors import SelectionRuntimeError
 
 __all__ = ["XpathSelector"]
 XPATH_CACHE = {}
@@ -36,9 +35,7 @@ class LxmlNodeSelector(Selector[LxmlNodeT]):
 
     def select(self, query: str) -> SelectorList[LxmlNodeT]:
         if self.is_text_node():
-            raise SelectionRuntimeError(
-                "Text node selectors do not allow select method"
-            )
+            raise TypeError("Text node selectors do not allow select method")
         return super().select(query)
 
     def html(self) -> str:
@@ -48,7 +45,7 @@ class LxmlNodeSelector(Selector[LxmlNodeT]):
 
     def attr(self, key: str, default: Any = UNDEFINED) -> Any:
         if self.is_text_node():
-            raise SelectionRuntimeError("Text node selectors do not allow attr method")
+            raise TypeError("Text node selectors do not allow attr method")
         if default is UNDEFINED:
             if key in self.node().attrib:
                 return self.node().get(key)
