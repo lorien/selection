@@ -27,7 +27,6 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Utilities",
     #"Typing :: Typed",
-    "Programming Language :: Python :: Implementation :: CPython",
 ]
 dependencies = [
     'lxml;platform_system!="Windows"',
@@ -84,7 +83,7 @@ isolated_build = True
 
 [testenv]
 commands =
-    pytest {posargs}
+    pytest --cov selection --cov-report xml {posargs}
 deps =
-    -e .[test]
+    -rrequirements.txt
 """
