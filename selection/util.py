@@ -11,8 +11,6 @@ from typing import Optional, Union, cast
 import lxml.html
 from lxml.etree import _Element
 
-from .errors import DataNotFound
-
 RE_NUMBER = re.compile(r"\d+")
 RE_NUMBER_WITH_SPACES = re.compile(r"\d[\s\d]*")
 RE_SPACE = re.compile(r"\s+")
@@ -43,7 +41,7 @@ def find_number(
     :param ignore_spaces: if True then consider groups of digits delimited
         by spaces as a single number
 
-    Raises DataNotFound (subclass of IndexError) if number was not found.
+    Raises IndexError if number was not found.
     """
     if ignore_chars:
         for char in ignore_chars:
@@ -57,7 +55,7 @@ def find_number(
         if make_int:
             return int(val)
         return val
-    raise DataNotFound
+    raise IndexError("Could not find a number in given text")
 
 
 def process_named_entity(match: Match[str]) -> str:

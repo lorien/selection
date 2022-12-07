@@ -8,7 +8,6 @@ from typing import Any, Generic, TypeVar, Union
 
 from . import util
 from .const import UNDEFINED
-from .errors import DataNotFound
 
 __all__ = ["Selector", "SelectorList", "RexResultList"]
 LOG = logging.getLogger("selection.base")
@@ -109,7 +108,7 @@ class SelectorList(Generic[T]):
             return self.selector_list[0]
         except IndexError as ex:
             if default is UNDEFINED:
-                raise DataNotFound(
+                raise IndexError(
                     "Could not get first item for %s query of class %s"
                     % (
                         self.origin_query,
@@ -123,7 +122,7 @@ class SelectorList(Generic[T]):
             return self.one().node()
         except IndexError as ex:
             if default is UNDEFINED:
-                raise DataNotFound(
+                raise IndexError(
                     "Could not get first item for %s query of class %s"
                     % (
                         self.origin_query,
@@ -201,9 +200,9 @@ class SelectorList(Generic[T]):
         return len(self.selector_list) > 0
 
     def require(self) -> None:
-        """Raise DataNotFound if selector data does not exist."""
+        """Raise IndexError if selector data does not exist."""
         if not self.exists():
-            raise DataNotFound(
+            raise IndexError(
                 "Node does not exists, query: %s, query type: %s"
                 % (
                     self.origin_query,
@@ -269,7 +268,7 @@ class RexResultList:
             return util.normalize_spaces(util.decode_entities(self.one().group(1)))
         except (AttributeError, IndexError) as ex:
             if default is UNDEFINED:
-                raise DataNotFound from ex
+                raise IndexError from ex
             return default
 
     def number(self) -> int:

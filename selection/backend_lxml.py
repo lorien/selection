@@ -7,7 +7,7 @@ from lxml.etree import XPath, _Element
 from . import util
 from .base import Selector, SelectorList
 from .const import UNDEFINED
-from .errors import DataNotFound, SelectionRuntimeError
+from .errors import SelectionRuntimeError
 
 __all__ = ["XpathSelector"]
 XPATH_CACHE = {}
@@ -52,7 +52,7 @@ class LxmlNodeSelector(Selector[LxmlNodeT]):
         if default is UNDEFINED:
             if key in self.node().attrib:
                 return self.node().get(key)
-            raise DataNotFound("No such attribute: %s" % key)
+            raise IndexError("No such attribute: %s" % key)
         return self.node().get(key, default)
 
     def text(self, smart: bool = False, normalize_space: bool = True) -> str:
