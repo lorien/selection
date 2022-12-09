@@ -25,12 +25,4 @@ jobs:
 
     - name: Run tests
       run: |
-        make check
-
-    # @data: dec08, 2022
-    # @comment: fails with error Could not submit coverage: 503 Server Error: Service Unavailable for url: https://coveralls.io/api/v1/jobs
-    #- name: Upload coverage results
-    #  env:
-    #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #  run: |
-    #    coveralls --service=github
+        make pylint && make flake8 && make bandit

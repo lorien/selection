@@ -1,4 +1,4 @@
-.PHONY: bootstrap venv deps dirs clean test release check build coverage
+.PHONY: bootstrap venv deps dirs clean test release mypy pylint flake8 bandit check build coverage
 
 FILES_CHECK_MYPY = selection
 FILES_CHECK_ALL = $(FILES_CHECK_MYPY) tests
@@ -30,15 +30,27 @@ release:
 	&& make build \
 	&& twine upload dist/*
 
+mypy:
+	mypy --strict $(FILES_CHECK_MYPY)
+
+pylint:
+	pylint -j0 $(FILES_CHECK_ALL)
+
+flake8:
+	flake8 -j auto --max-cognitive-complexity=11 $(FILES_CHECK_ALL)
+
+bandit:
+	bandit -qc pyproject.toml -r $(FILES_CHECK_ALL)
+
 check:
 	echo "mypy" \
-	&& mypy --strict $(FILES_CHECK_MYPY) \
+	&& make mypy \
 	&& echo "pylint" \
-	&& pylint -j0 $(FILES_CHECK_ALL) \
+	&& make pylint \
 	&& echo "flake8" \
-	&& flake8 -j auto --max-cognitive-complexity=11 $(FILES_CHECK_ALL) \
+	&& make flake8 \
 	&& echo "bandit" \
-	&& bandit -qc pyproject.toml -r $(FILES_CHECK_ALL) \
+	&& make bandit
 
 build:
 	rm -rf *.egg-info
