@@ -1,6 +1,8 @@
 # Selection Documenation
 
-[![Travis CI](https://travis-ci.org/lorien/selection.png?branch=master)](https://travis-ci.org/lorien/selection)
+[![Tests](https://github.com/lorien/selection/actions/workflows/test.yml/badge.svg)](https://github.com/lorien/selection/actions/workflows/test.yml)
+[![Code Quality](https://github.com/lorien/selection/actions/workflows/code_quality.yml/badge.svg)](https://github.com/lorien/selection/actions/workflows/code_quality.yml)
+[![Typing](https://github.com/lorien/selection/actions/workflows/mypy.yml/badge.svg)](https://github.com/lorien/selection/actions/workflows/mypy.yml)
 [![Test coverage](https://coveralls.io/repos/lorien/selection/badge.svg?branch=master)](https://coveralls.io/r/lorien/selection?branch=master)
 
 API to query DOM tree of HTML/XML document.
