@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from collections.abc import Iterable
-from typing import Any, Protocol, TypeVar, cast
+from typing import Any, Dict, List, Protocol, TypeVar, cast  # noqa: PEA001
 
 from lxml.etree import XPath, _Element
 
@@ -14,7 +14,7 @@ REGEXP_NS = "http://exslt.org/regular-expressions"
 
 
 class LxmlNodeProtocol(Protocol):
-    attrib: dict[str, Any]
+    attrib: Dict[str, Any]
 
     def get(self, key: str, default: Any = None) -> Any:
         pass
@@ -87,4 +87,4 @@ class XpathSelector(LxmlNodeSelector[LxmlNodeT]):
         if isinstance(result, str):
             result = [result]
 
-        return cast(list[LxmlNodeT], result)
+        return cast(List[LxmlNodeT], result)

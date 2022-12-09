@@ -6,7 +6,7 @@ drop outdated weblib dependency.
 import re
 from html.entities import name2codepoint
 from re import Match
-from typing import Optional, Union, cast
+from typing import List, Optional, Union, cast  # noqa: PEA001
 
 import lxml.html
 from lxml.etree import _Element
@@ -32,7 +32,7 @@ def find_number(
     text: str,
     ignore_spaces: bool = False,
     make_int: bool = True,
-    ignore_chars: Optional[Union[str, list[str]]] = None,
+    ignore_chars: Optional[Union[str, List[str]]] = None,
 ) -> Union[str, int]:
     """
     Find the number in the `text`.
@@ -104,9 +104,12 @@ def decode_entities(html: str) -> str:
 
 def render_html(node: _Element) -> str:
     """Render Element node."""
-    return lxml.html.tostring(
-        cast(lxml.html.HtmlElement, node), encoding="utf-8"
-    ).decode("utf-8")
+    return cast(
+        str,
+        lxml.html.tostring(cast(lxml.html.HtmlElement, node), encoding="utf-8").decode(
+            "utf-8"
+        ),
+    )
 
 
 def get_node_text(
@@ -126,9 +129,12 @@ def get_node_text(
     else:
         if smart:
             value = " ".join(
-                node.xpath(
-                    './descendant-or-self::*[name() != "script" and '
-                    'name() != "style"]/text()[normalize-space()]'
+                cast(
+                    List[str],
+                    node.xpath(
+                        './descendant-or-self::*[name() != "script" and '
+                        'name() != "style"]/text()[normalize-space()]'
+                    ),
                 )
             )
         else:
@@ -137,7 +143,7 @@ def get_node_text(
             if isinstance(node, lxml.html.HtmlElement):
                 value = node.text_content()
             else:
-                value = "".join(node.xpath(".//text()"))
+                value = "".join(cast(List[str], node.xpath(".//text()")))
     if normalize_space:
         return normalize_spaces(value)
     return value

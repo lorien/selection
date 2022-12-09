@@ -4,7 +4,7 @@ from abc import abstractmethod
 from collections.abc import Iterable
 from re import Match, Pattern
 from types import TracebackType
-from typing import Any, Generic, TypeVar, Union
+from typing import Any, Generic, List, TypeVar, Union  # noqa: PEA001
 
 from . import util
 from .const import UNDEFINED
@@ -78,7 +78,7 @@ class SelectorList(Generic[T]):
 
     def __init__(
         self,
-        selector_list: list[Selector[T]],
+        selector_list: List[Selector[T]],
         origin_selector_class: type[Selector[T]],
         origin_query: str,
     ) -> None:
@@ -146,7 +146,7 @@ class SelectorList(Generic[T]):
         else:
             return sel.text(smart=smart, normalize_space=normalize_space)
 
-    def text_list(self, smart: bool = False, normalize_space: bool = True) -> list[str]:
+    def text_list(self, smart: bool = False, normalize_space: bool = True) -> List[str]:
         result_list = []
         for item in self.selector_list:
             result_list.append(item.text(normalize_space=normalize_space, smart=smart))
@@ -238,7 +238,7 @@ class SelectorList(Generic[T]):
         else:
             return sel.rex(regexp, flags=flags)
 
-    def node_list(self) -> list[Any]:
+    def node_list(self) -> List[Any]:
         return [x.node() for x in self.selector_list]
 
     def __iter__(self) -> Iterable[Selector[T]]:
@@ -256,7 +256,7 @@ class SelectorList(Generic[T]):
 class RexResultList:
     __slots__ = ("items", "source_rex")
 
-    def __init__(self, items: list[Match[str]], source_rex: Pattern[str]) -> None:
+    def __init__(self, items: List[Match[str]], source_rex: Pattern[str]) -> None:
         self.items = items
         self.source_rex = source_rex
 
