@@ -9,6 +9,7 @@ from typing import (  # noqa: PEA001
     List,
     Match,
     Pattern,
+    Type,
     TypeVar,
     Union,
 )
@@ -86,7 +87,7 @@ class SelectorList(Generic[T]):
     def __init__(
         self,
         selector_list: List[Selector[T]],
-        origin_selector_class: type[Selector[T]],
+        origin_selector_class: Type[Selector[T]],
         origin_query: str,
     ) -> None:
         self.selector_list = selector_list
@@ -97,7 +98,7 @@ class SelectorList(Generic[T]):
         return self
 
     def __exit__(
-        self, exc_type: type[Exception], exc_value: Exception, traceback: TracebackType
+        self, exc_type: Type[Exception], exc_value: Exception, traceback: TracebackType
     ) -> None:
         pass
 
