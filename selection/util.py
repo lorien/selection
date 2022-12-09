@@ -5,8 +5,7 @@ drop outdated weblib dependency.
 """
 import re
 from html.entities import name2codepoint
-from re import Match
-from typing import List, Optional, Union, cast  # noqa: PEA001
+from typing import List, Match, Optional, Union, cast  # noqa: PEA001
 
 import lxml.html
 from lxml.etree import _Element

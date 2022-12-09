@@ -2,9 +2,8 @@ import logging
 import re
 from abc import abstractmethod
 from collections.abc import Iterable
-from re import Match, Pattern
 from types import TracebackType
-from typing import Any, Generic, List, TypeVar, Union  # noqa: PEA001
+from typing import Any, Generic, List, Match, Pattern, TypeVar, Union  # noqa: PEA001
 
 from . import util
 from .const import UNDEFINED
