@@ -1,5 +1,4 @@
-from collections.abc import Iterable
-from typing import Any, cast
+from typing import Any, Iterable, cast  # noqa: PEA001
 
 from pyquery import PyQuery
 

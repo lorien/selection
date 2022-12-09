@@ -1,6 +1,5 @@
 from abc import abstractmethod
-from collections.abc import Iterable
-from typing import Any, Dict, List, Protocol, TypeVar, cast  # noqa: PEA001
+from typing import Any, Dict, Iterable, List, Protocol, TypeVar, cast  # noqa: PEA001
 
 from lxml.etree import XPath, _Element
 
