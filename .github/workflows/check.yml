@@ -1,0 +1,36 @@
+name: test
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python: ['3.7', '3.8', '3.9', '3.10']
+    steps:
+
+    - uses: actions/checkout@v2
+
+    - name: Set up Python ${{ matrix.python }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python }}
+
+    - name: Install dependencies
+      run: |
+        pip install -U -r requirements.txt
+        pip install -U -e .[pyquery]
+
+    - name: Run tests
+      run: |
+        make check
+
+    # @data: dec08, 2022
+    # @comment: fails with error Could not submit coverage: 503 Server Error: Service Unavailable for url: https://coveralls.io/api/v1/jobs
+    #- name: Upload coverage results
+    #  env:
+    #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #  run: |
+    #    coveralls --service=github

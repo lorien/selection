@@ -104,12 +104,9 @@ def decode_entities(html: str) -> str:
 
 def render_html(node: _Element) -> str:
     """Render Element node."""
-    return cast(
-        str,
-        lxml.html.tostring(cast(lxml.html.HtmlElement, node), encoding="utf-8").decode(
-            "utf-8"
-        ),
-    )
+    return lxml.html.tostring(
+        cast(lxml.html.HtmlElement, node), encoding="utf-8"
+    ).decode("utf-8")
 
 
 def get_node_text(
