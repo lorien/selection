@@ -25,7 +25,7 @@ jobs:
 
     - name: Run tests
       run: |
-        pytest
+        make test
 
     # @data: dec08, 2022
     # @comment: fails with error Could not submit coverage: 503 Server Error: Service Unavailable for url: https://coveralls.io/api/v1/jobs

@@ -43,14 +43,8 @@ bandit:
 	bandit -qc pyproject.toml -r $(FILES_CHECK_ALL)
 
 check:
-	echo "mypy" \
-	&& make mypy \
-	&& echo "pylint" \
-	&& make pylint \
-	&& echo "flake8" \
-	&& make flake8 \
-	&& echo "bandit" \
-	&& make bandit
+	tox -e py3-check \
+	&& tox -e py38-check
 
 build:
 	rm -rf *.egg-info

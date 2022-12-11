@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Any, Dict, Iterable, List, Protocol, TypeVar, cast  # noqa: PEA001
+from typing import Any, Iterable, List, TypeVar, cast  # noqa: PEA001
 
 from lxml.etree import XPath, _Element
 
@@ -10,16 +10,7 @@ from .const import UNDEFINED
 __all__ = ["XpathSelector"]
 XPATH_CACHE = {}
 REGEXP_NS = "http://exslt.org/regular-expressions"
-
-
-class LxmlNodeProtocol(Protocol):
-    attrib: Dict[str, Any]
-
-    def get(self, key: str, default: Any = None) -> Any:
-        pass
-
-
-LxmlNodeT = TypeVar("LxmlNodeT", bound=LxmlNodeProtocol)
+LxmlNodeT = TypeVar("LxmlNodeT", bound=_Element)  # LxmlNodeProtocol)
 
 
 class LxmlNodeSelector(Selector[LxmlNodeT]):
