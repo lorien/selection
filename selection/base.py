@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 import re
 from abc import abstractmethod
@@ -6,10 +8,8 @@ from typing import (  # noqa: PEA001
     Any,
     Generic,
     Iterable,
-    List,
     Match,
     Pattern,
-    Type,
     TypeVar,
     Union,
 )
@@ -86,8 +86,8 @@ class SelectorList(Generic[T]):
 
     def __init__(
         self,
-        selector_list: List[Selector[T]],
-        origin_selector_class: Type[Selector[T]],
+        selector_list: list[Selector[T]],
+        origin_selector_class: type[Selector[T]],
         origin_query: str,
     ) -> None:
         self.selector_list = selector_list
@@ -98,7 +98,7 @@ class SelectorList(Generic[T]):
         return self
 
     def __exit__(
-        self, exc_type: Type[Exception], exc_value: Exception, traceback: TracebackType
+        self, exc_type: type[Exception], exc_value: Exception, traceback: TracebackType
     ) -> None:
         pass
 
@@ -154,7 +154,7 @@ class SelectorList(Generic[T]):
         else:
             return sel.text(smart=smart, normalize_space=normalize_space)
 
-    def text_list(self, smart: bool = False, normalize_space: bool = True) -> List[str]:
+    def text_list(self, smart: bool = False, normalize_space: bool = True) -> list[str]:
         result_list = []
         for item in self.selector_list:
             result_list.append(item.text(normalize_space=normalize_space, smart=smart))
@@ -246,7 +246,7 @@ class SelectorList(Generic[T]):
         else:
             return sel.rex(regexp, flags=flags)
 
-    def node_list(self) -> List[Any]:
+    def node_list(self) -> list[Any]:
         return [x.node() for x in self.selector_list]
 
     def __iter__(self) -> Iterable[Selector[T]]:
@@ -264,7 +264,7 @@ class SelectorList(Generic[T]):
 class RexResultList:
     __slots__ = ("items", "source_rex")
 
-    def __init__(self, items: List[Match[str]], source_rex: Pattern[str]) -> None:
+    def __init__(self, items: list[Match[str]], source_rex: Pattern[str]) -> None:
         self.items = items
         self.source_rex = source_rex
 
