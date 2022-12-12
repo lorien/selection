@@ -1,4 +1,8 @@
-from typing import Any, Iterable, cast  # noqa: PEA001
+from __future__ import annotations
+
+import typing
+from collections.abc import Iterable
+from typing import Any, cast
 
 from pyquery import PyQuery
 
@@ -14,4 +18,5 @@ class PyquerySelector(LxmlNodeSelector[LxmlNodeT]):
         return PyQuery(self.node())
 
     def process_query(self, query: str) -> Iterable[LxmlNodeT]:
-        return cast(Iterable[LxmlNodeT], self.pyquery_node().find(query))
+        # pylint: disable=deprecated-typing-alias
+        return cast(typing.Iterable[LxmlNodeT], self.pyquery_node().find(query))

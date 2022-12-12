@@ -3,9 +3,12 @@
 Most of this module contents is a copy-paste from weblib package. It is done to
 drop outdated weblib dependency.
 """
+from __future__ import annotations
+
 import re
 from html.entities import name2codepoint
-from typing import List, Match, Optional, Union, cast  # noqa: PEA001
+from re import Match
+from typing import List, cast
 
 import lxml.html
 from lxml.etree import _Element
@@ -31,8 +34,8 @@ def find_number(
     text: str,
     ignore_spaces: bool = False,
     make_int: bool = True,
-    ignore_chars: Optional[Union[str, List[str]]] = None,
-) -> Union[str, int]:
+    ignore_chars: None | str | list[str] = None,
+) -> str | int:
     """Find the number in the `text`.
 
     :param text: str
@@ -120,6 +123,7 @@ def get_node_text(
     if isinstance(node, str):
         value = str(node)
     elif smart:
+        # pylint: disable=deprecated-typing-alias
         value = " ".join(
             cast(
                 List[str],
@@ -134,7 +138,7 @@ def get_node_text(
     else:
         # If DOM tree was built with lxml.etree.fromstring
         # then tree nodes do not have text_content() method
-        value = "".join(cast(List[str], node.xpath(".//text()")))
+        value = "".join(map(str, node.xpath(".//text()")))
     if normalize_space:
         return normalize_spaces(value)
     return value

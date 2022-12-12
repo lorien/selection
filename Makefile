@@ -43,8 +43,8 @@ bandit:
 	bandit -qc pyproject.toml -r $(FILES_CHECK_ALL)
 
 check:
-	tox -e py3-check \
-	&& tox -e py38-check
+	tox -e py38-check \
+	&& tox -e py3-check
 
 build:
 	rm -rf *.egg-info

@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import Any, Iterable, List, TypeVar, cast  # noqa: PEA001
+from collections.abc import Iterable
+from typing import Any, List, TypeVar, cast
 
 from lxml.etree import XPath, _Element
 
@@ -79,4 +80,5 @@ class XpathSelector(LxmlNodeSelector[LxmlNodeT]):
         if isinstance(result, str):
             result = [result]
 
+        # pylint: disable=deprecated-typing-alias
         return cast(List[LxmlNodeT], result)

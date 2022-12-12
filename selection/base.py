@@ -3,16 +3,10 @@ from __future__ import annotations
 import logging
 import re
 from abc import abstractmethod
+from collections.abc import Iterable
+from re import Match, Pattern
 from types import TracebackType
-from typing import (  # noqa: PEA001
-    Any,
-    Generic,
-    Iterable,
-    Match,
-    Pattern,
-    TypeVar,
-    Union,
-)
+from typing import Any, Generic, TypeVar
 
 from . import util
 from .const import UNDEFINED
@@ -72,7 +66,7 @@ class Selector(Generic[T]):
             return default
 
     def rex(
-        self, regexp: Union[str, Pattern[str]], flags: int = 0
+        self, regexp: str | Pattern[str], flags: int = 0
     ) -> "RexResultList":  # pylint: disable=used-before-assignment
 
         if isinstance(regexp, str):
