@@ -33,8 +33,7 @@ def find_number(
     make_int: bool = True,
     ignore_chars: Optional[Union[str, List[str]]] = None,
 ) -> Union[str, int]:
-    """
-    Find the number in the `text`.
+    """Find the number in the `text`.
 
     :param text: str
     :param ignore_spaces: if True then consider groups of digits delimited
@@ -84,8 +83,7 @@ def process_hex_entity(match: Match[str]) -> str:
 
 
 def decode_entities(html: str) -> str:
-    """
-    Convert all HTML entities into their unicode representations.
+    """Convert all HTML entities into their unicode representations.
 
     This functions processes following entities:
      * &XXX;
@@ -111,8 +109,7 @@ def render_html(node: _Element) -> str:
 def get_node_text(
     node: _Element, smart: bool = False, normalize_space: bool = True
 ) -> str:
-    """
-    Extract text content of the `node` and all its descendants.
+    """Extract text content of the `node` and all its descendants.
 
     In smart mode `get_node_text` insert spaces between <tag><another tag>
     and also ignores content of the script and style tags.
@@ -122,24 +119,22 @@ def get_node_text(
     """
     if isinstance(node, str):
         value = str(node)
-    else:
-        if smart:
-            value = " ".join(
-                cast(
-                    List[str],
-                    node.xpath(
-                        './descendant-or-self::*[name() != "script" and '
-                        'name() != "style"]/text()[normalize-space()]'
-                    ),
-                )
+    elif smart:
+        value = " ".join(
+            cast(
+                List[str],
+                node.xpath(
+                    './descendant-or-self::*[name() != "script" and '
+                    'name() != "style"]/text()[normalize-space()]'
+                ),
             )
-        else:
-            # If DOM tree was built with lxml.etree.fromstring
-            # then tree nodes do not have text_content() method
-            if isinstance(node, lxml.html.HtmlElement):
-                value = node.text_content()
-            else:
-                value = "".join(cast(List[str], node.xpath(".//text()")))
+        )
+    elif isinstance(node, lxml.html.HtmlElement):
+        value = node.text_content()
+    else:
+        # If DOM tree was built with lxml.etree.fromstring
+        # then tree nodes do not have text_content() method
+        value = "".join(cast(List[str], node.xpath(".//text()")))
     if normalize_space:
         return normalize_spaces(value)
     return value
