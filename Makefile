@@ -21,8 +21,10 @@ clean:
 	find -name '*.swp' -delete
 	find -name '__pycache__' -delete
 
-test:
+pytest:
 	pytest
+
+test: check pytest
 
 release:
 	git push \
@@ -42,9 +44,7 @@ flake8:
 bandit:
 	bandit -qc pyproject.toml -r $(FILES_CHECK_ALL)
 
-check:
-	tox -e py38-check \
-	&& tox -e py3-check
+check: mypy pylint flake8 bandit
 
 build:
 	rm -rf *.egg-info
