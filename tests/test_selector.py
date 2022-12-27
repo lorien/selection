@@ -283,6 +283,11 @@ class TestXpathSelectorList(TestCase):  # pylint: disable=too-many-public-method
         sel = XpathSelector(self.tree).select("//ul/li")
         self.assertEqual(self.tree.xpath("//ul/li"), sel.node_list())
 
+    def test_iteration(self):
+        for elem in XpathSelector(self.tree).select("//ul/li"):
+            print(elem)
+        # self.assertEqual(self.tree.xpath("//ul/li"), sel.node_list())
+
     def test_require(self):
         XpathSelector(self.tree).select("//ul").require()
 

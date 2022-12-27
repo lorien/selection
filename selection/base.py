@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import re
 from abc import abstractmethod
-from collections.abc import Iterable
+from collections.abc import Iterable, Iterator
 from re import Match, Pattern
 from types import TracebackType
 from typing import Any, Generic, TypeVar
@@ -101,6 +101,9 @@ class SelectorList(Generic[T]):
 
     def __len__(self) -> int:
         return self.count()
+
+    def __iter__(self) -> Iterator[Selector[T]]:
+        return iter(self.selector_list)
 
     def count(self) -> int:
         return len(self.selector_list)
@@ -242,9 +245,6 @@ class SelectorList(Generic[T]):
 
     def node_list(self) -> list[Any]:
         return [x.node() for x in self.selector_list]
-
-    def __iter__(self) -> Iterable[Selector[T]]:
-        return iter(self.selector_list)
 
     def select(self, query: str) -> "SelectorList[T]":
         result: SelectorList[T] = SelectorList(
