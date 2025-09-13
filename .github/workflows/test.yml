@@ -9,6 +9,10 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
         python: [2.7, 3.13]
+        exclude:
+        # there is no lxml wheel for py27-win
+        - os: windows-latest
+          python: 2.7
     steps:
 
     - uses: actions/checkout@v2
