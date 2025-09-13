@@ -1,4 +1,5 @@
 # Devel
+pip
 bumpversion
 build
 twine
