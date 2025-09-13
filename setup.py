@@ -7,6 +7,7 @@ setup(
     install_requires=[
         'lxml;platform_system!="Windows"',
         "six",
+        'typing-extensions; python_version <= "2.7"',
     ],
     extras_require={
         "pyquery": [
