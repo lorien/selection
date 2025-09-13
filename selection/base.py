@@ -68,7 +68,6 @@ class Selector(Generic[T]):
     def rex(
         self, regexp: str | Pattern[str], flags: int = 0
     ) -> "RexResultList":  # pylint: disable=used-before-assignment
-
         if isinstance(regexp, str):
             regexp = re.compile(regexp, flags)
         matches = list(regexp.finditer(self.html()))
@@ -148,8 +147,7 @@ class SelectorList(Generic[T]):
             if default is UNDEFINED:
                 raise
             return default
-        else:
-            return sel.text(smart=smart, normalize_space=normalize_space)
+        return sel.text(smart=smart, normalize_space=normalize_space)
 
     def text_list(self, smart: bool = False, normalize_space: bool = True) -> list[str]:
         result_list = []
@@ -164,8 +162,7 @@ class SelectorList(Generic[T]):
             if default is UNDEFINED:
                 raise
             return default
-        else:
-            return sel.html()
+        return sel.html()
 
     def inner_html(self, default: Any = UNDEFINED) -> Any:
         try:
@@ -174,9 +171,8 @@ class SelectorList(Generic[T]):
             if default is UNDEFINED:
                 raise
             return default
-        else:
-            result_list = [item.html() for item in sel.select("./*")]
-            return "".join(result_list).strip()
+        result_list = [item.html() for item in sel.select("./*")]
+        return "".join(result_list).strip()
 
     def number(
         self,
@@ -192,13 +188,12 @@ class SelectorList(Generic[T]):
             if default is UNDEFINED:
                 raise
             return default
-        else:
-            return sel.number(
-                ignore_spaces=ignore_spaces,
-                smart=smart,
-                default=default,
-                make_int=make_int,
-            )
+        return sel.number(
+            ignore_spaces=ignore_spaces,
+            smart=smart,
+            default=default,
+            make_int=make_int,
+        )
 
     def exists(self) -> bool:
         """Return True if selector list is not empty."""
@@ -222,8 +217,7 @@ class SelectorList(Generic[T]):
             if default is UNDEFINED:
                 raise
             return default
-        else:
-            return sel.attr(key, default=default)
+        return sel.attr(key, default=default)
 
     def attr_list(self, key: str, default: Any = UNDEFINED) -> Any:
         result_list = []
@@ -240,8 +234,7 @@ class SelectorList(Generic[T]):
             if default is UNDEFINED:
                 raise
             return default
-        else:
-            return sel.rex(regexp, flags=flags)
+        return sel.rex(regexp, flags=flags)
 
     def node_list(self) -> list[Any]:
         return [x.node() for x in self.selector_list]
