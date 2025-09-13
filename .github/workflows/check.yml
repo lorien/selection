@@ -1,28 +1,32 @@
 name: Code Quality
 
-on: [push]
+on: ["push", "pull_request"]
 
 jobs:
-  build:
+  check:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python: ['3.8', '3.9', '3.10']
+        python: [3.13]
     steps:
 
     - uses: actions/checkout@v2
 
     - name: Set up Python ${{ matrix.python }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python }}
 
     - name: Install dependencies
       run: |
-        pip install -U -r requirements.txt
+        pip install -U -r requirements_dev.txt
         pip install -U -e .[pyquery]
 
-    - name: Run tests
+    - name: Run ruff
       run: |
-        make pylint && make flake8 && make bandit
+        make ruff
+
+    - name: Run pylint
+      run: |
+        make pylint

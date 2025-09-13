@@ -1,36 +1,41 @@
 name: Tests
 
-on: [push]
+on: ["push", "pull_request"]
 
 jobs:
-  build:
+  test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        python: ['3.8', '3.9', '3.10']
+        os: [ubuntu-latest, windows-latest]
+        python: [2.7, 3.13]
     steps:
 
     - uses: actions/checkout@v2
 
-    - name: Set up Python ${{ matrix.python }}
-      uses: actions/setup-python@v2
+    - name: Install python ${{ matrix.python }} with LisardByte/setup_python action
+      if: matrix.python <= 2.7
+      uses: LizardByte/actions/actions/setup_python@master
+      with:
+        python-version: ${{ matrix.python }}
+
+    - name: Install python ${{ matrix.python }} with standard setup-python action
+      if: matrix.python > 2.7
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python }}
 
     - name: Install dependencies
       run: |
-        pip install -U -r requirements.txt
-        pip install -U -e .[pyquery]
+        pip install -U -r requirements_dev.txt
+
+    - name: Build wheel and install
+      run: |
+        make build
+        mv selection backup_selection
+        mv dist/*.whl dist/selection-0.0.1-py2.py3-none-any.whl
+        pip install -U dist/selection-0.0.1-py2.py3-none-any.whl
 
     - name: Run tests
       run: |
         make test
-
-    # @data: dec08, 2022
-    # @comment: fails with error Could not submit coverage: 503 Server Error: Service Unavailable for url: https://coveralls.io/api/v1/jobs
-    #- name: Upload coverage results
-    #  env:
-    #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #  run: |
-    #    coveralls --service=github
