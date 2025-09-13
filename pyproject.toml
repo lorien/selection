@@ -4,26 +4,37 @@ name = "selection"
 version = "0.0.21"
 description = "API to extract content from HTML & XML documents"
 readme = "README.md"
-requires-python = ">=3.8"
-license = {"file" = "LICENSE"}
+requires-python = ">=2.7"
+license = "MIT"
+license-files = ["LICENSE"]
 keywords = ["lxml", "dom", "html"]
 authors = [
     {name = "Gregory Petukhov", email = "lorien@lorien.name"}
 ]
 # https://pypi.org/pypi?%3Aaction=list_classifiers
 classifiers = [
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: Implementation :: CPython",
-    "License :: OSI Approved :: MIT License",
     "Development Status :: 4 - Beta",
     "Environment :: Console",
     "Intended Audience :: Developers",
     "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 2",
+    "Programming Language :: Python :: 2.7",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.0",
+    "Programming Language :: Python :: 3.1",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.2",
+    "Programming Language :: Python :: 3.3",
+    "Programming Language :: Python :: 3.4",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Utilities",
     "Typing :: Typed",
@@ -33,7 +44,11 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-pyquery = ["pyquery"]
+pyquery = [
+    "six",
+    'pyquery<=1.4.3; python_version < "3.0"',
+    'pyquery; python_version >= "3.0"',
+]
 
 [build-system]
 requires = ["setuptools"]
@@ -65,7 +80,15 @@ ignore_missing_imports = true
 [tool.pylint.main]
 jobs=4
 extension-pkg-whitelist="lxml"
-disable="missing-docstring,broad-except,too-few-public-methods,consider-using-f-string,fixme"
+# R0911 -- handled by ruff
+# R0912 -- handled by ruff
+# R0915 -- handled by ruff
+# R0917 -- handled by ruff
+# R0204 -- redefined-variable-type -- handled by ruff
+# useless-object-inheritance -- for py27
+# redundant-u-string-prefix -- for py27
+# raise-missing-from -- for py27
+disable="no-member,missing-docstring,broad-except,too-few-public-methods,consider-using-f-string,fixme,isinstance-second-argument-not-valid-type,R0911,R0912,R0915,R0917,R0204,useless-object-inheritance,redundant-u-string-prefix,raise-missing-from"
 variable-rgx="[a-z_][a-z0-9_]{1,30}$"
 attr-rgx="[a-z_][a-z0-9_]{1,30}$"
 argument-rgx="[a-z_][a-z0-9_]{1,30}$"
@@ -73,11 +96,9 @@ max-line-length=88
 max-args=9
 load-plugins=[
     "pylint.extensions.check_elif",
-    "pylint.extensions.comparetozero",
     "pylint.extensions.comparison_placement",
     "pylint.extensions.consider_ternary_expression",
     "pylint.extensions.docstyle",
-    "pylint.extensions.emptystring",
     "pylint.extensions.for_any_all",
     "pylint.extensions.overlapping_exceptions",
     "pylint.extensions.redefined_loop_name",

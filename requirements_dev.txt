@@ -1,0 +1,17 @@
+# Devel
+bumpversion
+build
+twine
+
+# test
+coverage
+pytest-cov
+pytest
+
+# Types and Linters
+ruff; python_version >= "3.11"
+mypy; python_version >= "3.11"
+pylint; python_version >= "3.11"
+types-urllib3; python_version >= "3.11"
+types-six; python_version >= "3.11"
+types-lxml; python_version >= "3.11"
