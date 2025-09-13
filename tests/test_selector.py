@@ -6,6 +6,7 @@ from lxml.html import fromstring
 from selection.backend_lxml import XpathSelector
 from selection.backend_pyquery import PyquerySelector
 from selection.base import RexResultList
+from selection.errors import DataNotFoundError
 
 HTML = """
 <html>
@@ -83,7 +84,7 @@ class TestXpathSelector(TestCase):  # pylint: disable=too-many-public-methods
     def test_sel_list_number_does_not_exist(self):
         sel = XpathSelector(self.tree).select("//ul/li[1]")
         self.assertEqual("DEFAULT", sel.number(default="DEFAULT"))
-        self.assertRaises(IndexError, sel.number)
+        self.assertRaises(DataNotFoundError, sel.number)
 
     def test_selector_number(self):
         sel = XpathSelector(self.tree)
@@ -93,7 +94,7 @@ class TestXpathSelector(TestCase):  # pylint: disable=too-many-public-methods
     def test_selector_number_does_not_exist(self):
         sel = XpathSelector(self.tree).select("//ul/li[1]").one()
         self.assertEqual("DEFAULT", sel.number(default="DEFAULT"))
-        self.assertRaises(IndexError, sel.number)
+        self.assertRaises(DataNotFoundError, sel.number)
 
     def test_text_selector(self):
         sel = XpathSelector(self.tree).select("//li/text()").one()
@@ -126,7 +127,9 @@ class TestXpathSelector(TestCase):  # pylint: disable=too-many-public-methods
 
     def test_attr_does_not_exist(self):
         root = XpathSelector(self.tree)
-        self.assertRaises(IndexError, lambda: root.select("//ul[1]").attr("id-xxx"))
+        self.assertRaises(
+            DataNotFoundError, lambda: root.select("//ul[1]").attr("id-xxx")
+        )
 
     def test_attr_list(self):
         root = XpathSelector(self.tree)
@@ -190,7 +193,7 @@ class TestXpathSelectorList(TestCase):  # pylint: disable=too-many-public-method
 
     def test_one_default(self):
         sel = XpathSelector(self.tree).select("//ul/li[10]")
-        self.assertRaises(IndexError, sel.one)
+        self.assertRaises(DataNotFoundError, sel.one)
         self.assertEqual("DEFAULT", sel.one(default="DEFAULT"))
 
     def test_node(self):
@@ -199,7 +202,7 @@ class TestXpathSelectorList(TestCase):  # pylint: disable=too-many-public-method
 
     def test_node_default(self):
         sel = XpathSelector(self.tree).select("//ul/li[10]")
-        self.assertRaises(IndexError, sel.node)
+        self.assertRaises(DataNotFoundError, sel.node)
         self.assertEqual("DEFAULT", sel.node(default="DEFAULT"))
 
     def test_text(self):
@@ -208,7 +211,7 @@ class TestXpathSelectorList(TestCase):  # pylint: disable=too-many-public-method
 
     def test_text_default(self):
         sel = XpathSelector(self.tree).select("//ul/li[10]")
-        self.assertRaises(IndexError, sel.text)
+        self.assertRaises(DataNotFoundError, sel.text)
         self.assertEqual("DEFAULT", sel.text(default="DEFAULT"))
 
     def test_html(self):
@@ -217,7 +220,7 @@ class TestXpathSelectorList(TestCase):  # pylint: disable=too-many-public-method
 
     def test_html_default(self):
         sel = XpathSelector(self.tree).select("//ul/li[10]")
-        self.assertRaises(IndexError, sel.html)
+        self.assertRaises(DataNotFoundError, sel.html)
         self.assertEqual("DEFAULT", sel.html(default="DEFAULT"))
 
     def test_inner_html(self):
@@ -229,7 +232,7 @@ class TestXpathSelectorList(TestCase):  # pylint: disable=too-many-public-method
 
     def test_inner_html_default(self):
         sel = XpathSelector(self.tree).select("//ul/li[10]")
-        self.assertRaises(IndexError, sel.inner_html)
+        self.assertRaises(DataNotFoundError, sel.inner_html)
         self.assertEqual("DEFAULT", sel.inner_html(default="DEFAULT"))
 
     def test_number(self):
@@ -238,7 +241,7 @@ class TestXpathSelectorList(TestCase):  # pylint: disable=too-many-public-method
 
     def test_number_default(self):
         sel = XpathSelector(self.tree).select("//ul/li[10]")
-        self.assertRaises(IndexError, sel.number)
+        self.assertRaises(DataNotFoundError, sel.number)
         self.assertEqual("DEFAULT", sel.number(default="DEFAULT"))
 
     def test_exists(self):
@@ -268,7 +271,7 @@ class TestXpathSelectorList(TestCase):  # pylint: disable=too-many-public-method
 
     def test_attr_default(self):
         sel = XpathSelector(self.tree).select("//ul[2]/li[10]")
-        self.assertRaises(IndexError, lambda: sel.attr("class"))
+        self.assertRaises(DataNotFoundError, lambda: sel.attr("class"))
         self.assertEqual("DEFAULT", sel.attr("class", default="DEFAULT"))
 
     def test_rex(self):
@@ -277,7 +280,7 @@ class TestXpathSelectorList(TestCase):  # pylint: disable=too-many-public-method
 
     def test_rex_default(self):
         sel = XpathSelector(self.tree).select("//ul/li[10]")
-        self.assertRaises(IndexError, lambda: sel.rex("zz"))
+        self.assertRaises(DataNotFoundError, lambda: sel.rex("zz"))
         self.assertEqual("DEFAULT", sel.rex("zz", default="DEFAULT"))
 
     def test_node_list(self):
@@ -292,7 +295,9 @@ class TestXpathSelectorList(TestCase):  # pylint: disable=too-many-public-method
     def test_require(self):
         XpathSelector(self.tree).select("//ul").require()
 
-        self.assertRaises(IndexError, XpathSelector(self.tree).select("//foo").require)
+        self.assertRaises(
+            DataNotFoundError, XpathSelector(self.tree).select("//foo").require
+        )
 
 
 class RexResultListTestCase(TestCase):
@@ -312,7 +317,7 @@ class RexResultListTestCase(TestCase):
 
     def test_text_no_default(self):
         sel = XpathSelector(self.tree).select("//ul/li/text()")
-        self.assertRaises(IndexError, lambda: sel.rex("(zz)").text())
+        self.assertRaises(DataNotFoundError, lambda: sel.rex("(zz)").text())
 
     def test_text_default_value(self):
         sel = XpathSelector(self.tree).select("//ul/li/text()")
