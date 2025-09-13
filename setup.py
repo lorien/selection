@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="selection",
-    version="0.0.21",
+    version="1.0.0",
     packages=["selection"],
     install_requires=[
         'lxml;platform_system!="Windows"',

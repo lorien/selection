@@ -10,4 +10,4 @@ __all__ = [
     "XpathSelector",
 ]
 
-__version__ = "0.0.21"
+__version__ = "1.0.0"
