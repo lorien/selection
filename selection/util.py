@@ -1,41 +1,51 @@
+# coding: utf-8
 """Helpful things used in multiple modules of selection package.
 
 Most of this module contents is a copy-paste from weblib package. It is done to
 drop outdated weblib dependency.
 """
-from __future__ import annotations
+# from __future__ import annotations
 
 import re
-from html.entities import name2codepoint
-from re import Match
 from typing import List, cast
+
+try:  # noqa: SIM105
+    # for type checking with mypy
+    # mypy runs on modern python version
+    from re import Match
+except ImportError:
+    pass
 
 import lxml.html
 from lxml.etree import _Element
+from six.moves.html_entities import name2codepoint
 
 RE_NUMBER = re.compile(r"\d+")
 RE_NUMBER_WITH_SPACES = re.compile(r"\d[\s\d]*")
 RE_SPACE = re.compile(r"\s+")
 RE_NAMED_ENTITY = re.compile(r"(&[a-z]+;)")
 RE_NUM_ENTITY = re.compile(r"(&#[0-9]+;)")
-RE_HEX_ENTITY = re.compile(r"(&#x[a-f0-9]+;)", re.I)
+RE_HEX_ENTITY = re.compile(r"(&#x[a-f0-9]+;)", re.IGNORECASE)
 
 
-def normalize_spaces(val: str) -> str:
+def normalize_spaces(val):
+    # type: (str) -> str
     return re.sub(r"\s+", " ", val).strip()
 
 
-def drop_spaces(val: str) -> str:
+def drop_spaces(val):
+    # type: (str) -> str
     """Drop all space-chars in the `text`."""
     return RE_SPACE.sub("", val)
 
 
 def find_number(
-    text: str,
-    ignore_spaces: bool = False,
-    make_int: bool = True,
-    ignore_chars: None | str | list[str] = None,
-) -> str | int:
+    text,  # type: str
+    ignore_spaces=False,  # type: bool
+    make_int=True,  # type: bool
+    ignore_chars=None,  # type: None | str | list[str]
+):
+    # type: (...) -> str | int
     """Find the number in the `text`.
 
     :param text: str
@@ -59,7 +69,8 @@ def find_number(
     raise IndexError("Could not find a number in given text")
 
 
-def process_named_entity(match: Match[str]) -> str:
+def process_named_entity(match):
+    # type: (Match[str]) -> str
     entity = match.group(1)
     name = entity[1:-1]
     if name in name2codepoint:
@@ -67,7 +78,8 @@ def process_named_entity(match: Match[str]) -> str:
     return entity
 
 
-def process_num_entity(match: Match[str]) -> str:
+def process_num_entity(match):
+    # type: (Match[str]) -> str
     entity = match.group(1)
     num = entity[2:-1]
     try:
@@ -76,7 +88,8 @@ def process_num_entity(match: Match[str]) -> str:
         return entity
 
 
-def process_hex_entity(match: Match[str]) -> str:
+def process_hex_entity(match):
+    # type: (Match[str]) -> str
     entity = match.group(1)
     code = entity[3:-1]
     try:
@@ -85,7 +98,8 @@ def process_hex_entity(match: Match[str]) -> str:
         return entity
 
 
-def decode_entities(html: str) -> str:
+def decode_entities(html):
+    # type: (str) -> str
     """Convert all HTML entities into their unicode representations.
 
     This functions processes following entities:
@@ -96,22 +110,22 @@ def decode_entities(html: str) -> str:
 
         >>> print html.decode_entities('&rarr;ABC&nbsp;&#82;&copy;')
         →ABC R©
-    """
+    """  # noqa: RUF002
     html = RE_NUM_ENTITY.sub(process_num_entity, html)
     html = RE_HEX_ENTITY.sub(process_hex_entity, html)
     return RE_NAMED_ENTITY.sub(process_named_entity, html)
 
 
-def render_html(node: _Element) -> str:
+def render_html(node):
+    # type: (_Element) -> str
     """Render Element node."""
     return lxml.html.tostring(
         cast(lxml.html.HtmlElement, node), encoding="utf-8"
     ).decode("utf-8")
 
 
-def get_node_text(
-    node: _Element, smart: bool = False, normalize_space: bool = True
-) -> str:
+def get_node_text(node, smart=False, normalize_space=True):
+    # type: (_Element, bool, bool) -> str
     """Extract text content of the `node` and all its descendants.
 
     In smart mode `get_node_text` insert spaces between <tag><another tag>

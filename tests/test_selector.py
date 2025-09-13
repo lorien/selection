@@ -67,9 +67,9 @@ class TestXpathSelector(TestCase):  # pylint: disable=too-many-public-methods
 
     def test_select_node(self):
         sel = XpathSelector(self.tree)
-        self.assertEqual(
-            "test", sel.select("//h1")[0]._node.text  # pylint: disable=protected-access
-        )
+        # pylint: disable=protected-access
+        self.assertEqual("test", sel.select("//h1")[0]._node.text)  # noqa: SLF001
+        # pylint: enable=protected-access
 
     def test_html(self):
         sel = XpathSelector(self.tree.xpath("//h1")[0])
@@ -183,7 +183,8 @@ class TestXpathSelectorList(TestCase):  # pylint: disable=too-many-public-method
     def test_one(self):
         sel = XpathSelector(self.tree).select("//ul/li")
         self.assertEqual(
-            "one", sel.one()._node.text  # pylint: disable=protected-access
+            "one",
+            sel.one()._node.text,  # pylint: disable=protected-access # noqa: SLF001
         )
         self.assertEqual("one", sel.text())
 
@@ -300,7 +301,10 @@ class RexResultListTestCase(TestCase):
 
     def test_one(self):
         sel = XpathSelector(self.tree).select("//ul/li")
-        self.assertEqual("Match", sel.rex("one").one().__class__.__name__)
+        # Match object class has different names in different python versions
+        self.assertTrue(
+            sel.rex("one").one().__class__.__name__ in {"Match", "SRE_Match"}
+        )
 
     def test_text(self):
         sel = XpathSelector(self.tree).select("//ul/li/text()")

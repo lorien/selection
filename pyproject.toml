@@ -41,12 +41,12 @@ classifiers = [
 ]
 dependencies = [
     'lxml;platform_system!="Windows"',
+    "six",
 ]
 
 [project.optional-dependencies]
 pyquery = [
-    "six",
-    'pyquery<=1.4.3; python_version < "3.0"',
+    'pyquery<=1.4.1; python_version < "3.0"',
     'pyquery; python_version >= "3.0"',
 ]
 
@@ -68,11 +68,6 @@ profile = "black"
 line_length = 88
 # skip_gitignore = true # throws errors in stderr when ".git" dir does not exist
 
-[tool.bandit]
-# B101 assert_used
-# B410 Using HtmlElement to parse untrusted XML data
-skips = ["B101", "B410"]
-
 [[tool.mypy.overrides]]
 module = "pyquery"
 ignore_missing_imports = true
@@ -88,7 +83,8 @@ extension-pkg-whitelist="lxml"
 # useless-object-inheritance -- for py27
 # redundant-u-string-prefix -- for py27
 # raise-missing-from -- for py27
-disable="no-member,missing-docstring,broad-except,too-few-public-methods,consider-using-f-string,fixme,isinstance-second-argument-not-valid-type,R0911,R0912,R0915,R0917,R0204,useless-object-inheritance,redundant-u-string-prefix,raise-missing-from"
+# super-with-arguments -- for py27
+disable="no-member,missing-docstring,broad-except,too-few-public-methods,consider-using-f-string,fixme,isinstance-second-argument-not-valid-type,R0911,R0912,R0915,R0917,R0204,useless-object-inheritance,redundant-u-string-prefix,raise-missing-from,super-with-arguments"
 variable-rgx="[a-z_][a-z0-9_]{1,30}$"
 attr-rgx="[a-z_][a-z0-9_]{1,30}$"
 argument-rgx="[a-z_][a-z0-9_]{1,30}$"
@@ -109,3 +105,66 @@ load-plugins=[
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.ruff]
+lint.select = ["ALL"]
+lint.ignore = [
+    # Specific to selection project
+    "PT009", # Use a regular `assert` instead of unittest-style `assertEqual`
+    "PT027", # Use `pytest.raises` instead of unittest-style `assertRaises`
+    # py27 compat begins
+    "ANN001", # Missing type annotation for function argument
+    "ANN201", # Missing return type annotation for public function
+    "ANN003", # Missing type annotation for `**kwargs`
+    "ANN202", # Missing return type annotation for private function
+    "ANN204", # Missing return type annotation for special method
+    "B904", # Use `raise from` to specify exception cause
+    "B904", # Within an `except` clause, raise exceptions with `raise ... from err`
+    "UP025", # Remove unicode literals from strings
+    "UP004", # Class inherits from `object`
+    # or `raise ... from None` to distinguish them from errors in exception handling
+    "UP009", # UTF-8 encoding declaration is unnecessary
+    "UP035", # Import from `collections.abc` instead
+    "UP013", # Convert from `TypedDict` functional to class syntax
+    # py27 compat ends
+    "A003", # Class attribute `type` is shadowing a python builtin
+    "ANN401", # Dynamically typed expressions (typing.Any) are disallowed
+    "BLE001", # Do not catch blind exception: `Exception`
+    "COM812", # Trailing comma missing
+    "D100", # Missing docstring in public module
+    "D101", # Missing docstring in public class
+    "D102", # Missing docstring in public method1
+    "D103", # Missing docstring in public function
+    "D104", # Missing docstring in public package
+    "D105", # Missing docstring in magic method,
+    "D107", # Missing docstring in `__init__`
+    "D407", # Missing dashed underline after section ("Args")
+    "D413", # Missing blank line after last section ("Returns")
+    "D203", # 1 blank line required before class docstring
+    "D213", # Multi-line docstring summary should start at the second line
+    "EM101", # Check for raw usage of a string literal in Exception raising
+    "EM102", # Check for raw usage of an f-string literal in Exception raising
+    "EM103", # Check for raw usage of .format on a string literal in Exception raising
+    "F401", # Imported but unused
+    "FBT", # Boolean arg/value in function definition
+    "PTH", # A plugin finding use of functions that can be replaced by pathlib module
+    "S101", # Use of `assert` detected
+    "T201", # print found	
+    "T203", # pprint found
+    "TCH", # Move import into a type-checking block
+    "TRY003", # Avoid specifying long messages outside the exception class
+    "UP032", # Use f-string instead of format call
+    "ERA001", # Found commented-out code
+    "RUF001", # String contains ambiguous unicode character
+    "TD002", # Missing author in TODO
+    "TD003", # Missing issue link on the line following this TODO
+    "FIX002", # Line contains TODO
+    "RUF003", # Comment contains ambiguous
+    "RUF012", # Mutable class attributes should be annotated
+    "TRY400", #  Use `logging.exception` instead of `logging.error`
+    "PERF401", # Use a list comprehension to create a transformed list
+    "RUF100", # [*] Unused `noqa` directive
+]
+lint.pylint.max-args=9
+target-version = "py37"
+extend-exclude = ["var"]
