@@ -9,6 +9,8 @@ drop outdated weblib dependency.
 import re
 from typing import List, cast
 
+import six
+
 try:  # noqa: SIM105
     # for type checking with mypy
     # mypy runs on modern python version
@@ -136,8 +138,8 @@ def get_node_text(node, smart=False, normalize_space=True):
     In non-smart mode this func just return text_content() of node
     with normalized spaces
     """
-    if isinstance(node, str):
-        value = str(node)
+    if isinstance(node, six.string_types):
+        value = six.text_type(node)
     elif smart:
         # pylint: disable=deprecated-typing-alias
         value = " ".join(
@@ -154,7 +156,7 @@ def get_node_text(node, smart=False, normalize_space=True):
     else:
         # If DOM tree was built with lxml.etree.fromstring
         # then tree nodes do not have text_content() method
-        value = "".join(map(str, node.xpath(".//text()")))
+        value = "".join(map(six.text_type, node.xpath(".//text()")))
     if normalize_space:
         return normalize_spaces(value)
     return value

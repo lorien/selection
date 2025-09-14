@@ -3,6 +3,7 @@
 from abc import abstractmethod
 from typing import Any, List, TypeVar, cast
 
+import six
 from lxml.etree import XPath, _Element
 from six.moves.collections_abc import Iterable  # pylint: disable=import-error
 
@@ -27,7 +28,7 @@ class LxmlNodeSelector(Selector[LxmlNodeT]):
 
     def is_text_node(self):
         # type: () -> bool
-        return isinstance(self.node(), str)
+        return isinstance(self.node(), six.string_types)
 
     def select(self, query):
         # type: (str) -> SelectorList[LxmlNodeT]
@@ -38,7 +39,7 @@ class LxmlNodeSelector(Selector[LxmlNodeT]):
     def html(self):
         # type: () -> str
         if self.is_text_node():
-            return str(self.node())
+            return six.text_type(self.node())
         return util.render_html(cast(_Element, self.node()))
 
     def attr(self, key, default=UNDEFINED):
@@ -55,9 +56,9 @@ class LxmlNodeSelector(Selector[LxmlNodeT]):
         # type: (bool, bool) -> str
         if self.is_text_node():
             if normalize_space:
-                return util.normalize_spaces(cast(str, self.node()))
-            return str(self.node())
-        return str(
+                return util.normalize_spaces(cast(six.text_type, self.node()))
+            return six.text_type(self.node())
+        return six.text_type(
             util.get_node_text(
                 cast(_Element, self.node()),
                 smart=smart,
@@ -85,7 +86,7 @@ class XpathSelector(LxmlNodeSelector[LxmlNodeT]):
         if isinstance(result, bool):
             result = []
 
-        if isinstance(result, str):
+        if isinstance(result, six.string_types):
             result = [result]
 
         # pylint: disable=deprecated-typing-alias

@@ -178,10 +178,33 @@ class TestXpathSelector(TestCase):  # pylint: disable=too-many-public-methods
             vals = [x.text() for x in qs]
             self.assertEqual({"one", "two"}, set(vals))
 
-    def test_text_node_wrapping(self):
-        html = "<a>one</a><b>two</b>"
+    def test_text_node_wrapping_nonascii_call_text(self):
+        # fmt: off
+        html = u"<b>кошка</b>"
+        # fmt: on
         with XpathSelector(fromstring(html)).select("//b/text()") as elem:
-            self.assertEqual("two", elem.text())
+            # fmt: off
+            self.assertEqual(u"кошка", elem.text())
+            # fmt: on
+
+    def test_text_node_wrapping_ascii_call_text(self):
+        html = "<b>cat</b>"
+        with XpathSelector(fromstring(html)).select("//b/text()") as elem:
+            self.assertEqual("cat", elem.text())
+
+    def test_text_node_wrapping_nonascii_call_html(self):
+        # fmt: off
+        html = u"<b>кошка</b>"
+        # fmt: on
+        with XpathSelector(fromstring(html)).select("//b/text()") as elem:
+            # fmt: off
+            self.assertEqual(u"кошка", elem.html())
+            # fmt: on
+
+    def test_text_node_wrapping_ascii_call_html(self):
+        html = "<b>cat</b>"
+        with XpathSelector(fromstring(html)).select("//b/text()") as elem:
+            self.assertEqual("cat", elem.html())
 
 
 class TestXpathSelectorList(TestCase):  # pylint: disable=too-many-public-methods

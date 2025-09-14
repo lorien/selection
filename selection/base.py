@@ -4,6 +4,8 @@ import logging
 import re
 from abc import abstractmethod
 
+import six
+
 try:  # noqa: SIM105
     # for type checking with mypy
     # mypy runs on modern python version
@@ -85,8 +87,10 @@ class Selector(Generic[T]):
             return default
 
     def rex(self, regexp, flags=0):  # pylint: disable=used-before-assignment
-        # type: (str|Pattern[str], int) -> RexResultList
-        if isinstance(regexp, str):
+        # type: (bytes|str|Pattern[str], int) -> RexResultList
+        if isinstance(regexp, six.binary_type):
+            regexp = regexp.decode("utf-8")
+        if isinstance(regexp, six.text_type):
             regexp = re.compile(regexp, flags)
         matches = list(regexp.finditer(self.html()))
         return RexResultList(matches, source_rex=regexp)
