@@ -18,7 +18,7 @@ from six.moves.collections_abc import Iterable, Iterator  # pylint: disable=impo
 
 from . import util
 from .const import UNDEFINED
-from .errors import DataNotFoundError
+from .errors import SelectionNotFoundError
 
 __all__ = ["RexResultList", "Selector", "SelectorList"]
 LOG = logging.getLogger("selection.base")
@@ -79,7 +79,7 @@ class Selector(Generic[T]):
             return util.find_number(
                 self.text(smart=smart), ignore_spaces=ignore_spaces, make_int=make_int
             )
-        except DataNotFoundError:
+        except SelectionNotFoundError:
             if default is UNDEFINED:
                 raise
             return default
@@ -136,7 +136,7 @@ class SelectorList(Generic[T]):
             return self.selector_list[0]
         except IndexError:  # as ex:
             if default is UNDEFINED:
-                raise DataNotFoundError(
+                raise SelectionNotFoundError(
                     "Could not get first item for {} query of class {}".format(
                         self.origin_query,
                         self.origin_selector_class.__name__,
@@ -148,9 +148,9 @@ class SelectorList(Generic[T]):
         # type: (Any) -> Any
         try:
             return self.one().node()
-        except DataNotFoundError:  # as ex:
+        except SelectionNotFoundError:  # as ex:
             if default is UNDEFINED:
-                raise DataNotFoundError(
+                raise SelectionNotFoundError(
                     "Could not get first item for {} query of class {}".format(
                         self.origin_query,
                         self.origin_selector_class.__name__,
@@ -167,7 +167,7 @@ class SelectorList(Generic[T]):
         # type: (...) -> Any
         try:
             sel = self.one()
-        except DataNotFoundError:
+        except SelectionNotFoundError:
             if default is UNDEFINED:
                 raise
             return default
@@ -184,7 +184,7 @@ class SelectorList(Generic[T]):
         # type: (Any) -> Any
         try:
             sel = self.one()
-        except DataNotFoundError:
+        except SelectionNotFoundError:
             if default is UNDEFINED:
                 raise
             return default
@@ -194,7 +194,7 @@ class SelectorList(Generic[T]):
         # type: (Any) -> Any
         try:
             sel = self.one()
-        except DataNotFoundError:
+        except SelectionNotFoundError:
             if default is UNDEFINED:
                 raise
             return default
@@ -212,7 +212,7 @@ class SelectorList(Generic[T]):
         """Find number in normalized text of node which matches the given xpath."""
         try:
             sel = self.one()
-        except DataNotFoundError:
+        except SelectionNotFoundError:
             if default is UNDEFINED:
                 raise
             return default
@@ -230,9 +230,9 @@ class SelectorList(Generic[T]):
 
     def require(self):
         # type: () -> None
-        """Raise DataNotFoundError if selector data does not exist."""
+        """Raise SelectionNotFoundError if selector data does not exist."""
         if not self.exists():
-            raise DataNotFoundError(
+            raise SelectionNotFoundError(
                 "Node does not exists, query: {}, query type: {}".format(
                     self.origin_query,
                     self.origin_selector_class.__name__,
@@ -243,7 +243,7 @@ class SelectorList(Generic[T]):
         # type: (str, Any) -> Any
         try:
             sel = self.one()
-        except DataNotFoundError:
+        except SelectionNotFoundError:
             if default is UNDEFINED:
                 raise
             return default
@@ -260,7 +260,7 @@ class SelectorList(Generic[T]):
         # type: (Pattern[str], int, Any) -> Any
         try:
             sel = self.one()
-        except DataNotFoundError:
+        except SelectionNotFoundError:
             if default is UNDEFINED:
                 raise
             return default
@@ -293,15 +293,15 @@ class RexResultList:
         try:
             return self.items[0]
         except IndexError:
-            raise DataNotFoundError
+            raise SelectionNotFoundError
 
     def text(self, default=UNDEFINED):
         # type: (Any) -> Any
         try:
             return util.normalize_spaces(util.decode_entities(self.one().group(1)))
-        except (AttributeError, DataNotFoundError):  # as ex:
+        except (AttributeError, SelectionNotFoundError):  # as ex:
             if default is UNDEFINED:
-                raise DataNotFoundError  # from ex
+                raise SelectionNotFoundError  # from ex
             return default
 
     def number(self):

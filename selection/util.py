@@ -20,7 +20,7 @@ import lxml.html
 from lxml.etree import _Element
 from six.moves.html_entities import name2codepoint
 
-from .errors import DataNotFoundError
+from .errors import SelectionNotFoundError
 
 RE_NUMBER = re.compile(r"\d+")
 RE_NUMBER_WITH_SPACES = re.compile(r"\d[\s\d]*")
@@ -68,7 +68,7 @@ def find_number(
         if make_int:
             return int(val)
         return val
-    raise DataNotFoundError("Could not find a number in given text")
+    raise SelectionNotFoundError("Could not find a number in given text")
 
 
 def process_named_entity(match):

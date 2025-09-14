@@ -1,5 +1,5 @@
-__all__ = ["DataNotFoundError"]
+__all__ = ["SelectionNotFoundError"]
 
 
-class DataNotFoundError(Exception):
+class SelectionNotFoundError(Exception):
     pass
