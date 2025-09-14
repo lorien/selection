@@ -13,8 +13,8 @@ try:  # noqa: SIM105
 except ImportError:
     pass
 
-from types import TracebackType
-from typing import Any, Generic, TypeVar
+from types import TracebackType  # pylint: disable=wrong-import-order
+from typing import Any, Generic, TypeVar  # pylint: disable=wrong-import-order
 
 from six.moves.collections_abc import Iterable, Iterator  # pylint: disable=import-error
 
