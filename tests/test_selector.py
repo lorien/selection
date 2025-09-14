@@ -178,6 +178,11 @@ class TestXpathSelector(TestCase):  # pylint: disable=too-many-public-methods
             vals = [x.text() for x in qs]
             self.assertEqual({"one", "two"}, set(vals))
 
+    def test_text_node_wrapping(self):
+        html = "<a>one</a><b>two</b>"
+        with XpathSelector(fromstring(html)).select("//b/text()") as elem:
+            self.assertEqual("two", elem.text())
+
 
 class TestXpathSelectorList(TestCase):  # pylint: disable=too-many-public-methods
     def setUp(self):
